@@ -6,9 +6,104 @@
 body {
 	margin: 0px;
 	padding: 0px;
+	background-color: #f3f6f8 !important;
 }
 
 /* | Connection Status | */
 .connection-status {
 	display: none;
+}
+
+/* | Header | */
+.heading {
+	height: 110px;
+	width: 100%;
+	background-color: #fff;
+	margin-top: 20px;
+	box-shadow: 2px 2px 4px #ccc;
+	margin-left: 15px;
+}
+
+/* | General Styles | */
+.section  {
+	margin-top: 150px !important;
+}
+
+/* | Left Side | */
+.left-side {
+	height: auto;
+	width: 100%;
+}
+
+.messages-wrapper {
+	height: auto;
+	width: 100%;
+	background-color: #fff;
+	box-shadow: 2px 2px 4px #ccc;
+}
+
+.send-message {
+	margin-top: 15px;
+	border-bottom: 1px solid #ccc;
+}
+
+.sender {
+	margin-top: 10px;
+}
+
+.image {
+	height: 100px;
+	width: 100%;
+}
+
+.image img {
+	height: 100px !important;
+	width: 100% !important;
+	padding-bottom: 15px;
+}
+
+.image-info {
+	font-size: 20px !important;
+	margin-top: 5px;
+}
+
+.image-info:hover {
+	cursor: pointer;
+}
+
+.message {
+	margin-top: 15px;
+	border-bottom: 1px solid #ccc;
+}
+
+.text {
+	padding-bottom: 10px;
+}
+
+.posteddate {
+	color: grey;
+	font-style: italic;
+}
+
+/* | Right Side | */
+.right-side {
+	height: auto;
+	width: 100%;
+	background-color: #e2e2e2;
+	box-shadow: 2px 2px 4px #ccc;
+}
+
+.search-bar {
+	margin-top: 15px;
+}
+
+/* | Modal | */
+.modal-header {
+	background-color: #428bca !important;
+	color: #fff !important;
+}
+
+.modal-image {
+	height: 150px;
+	width: 100%;
 }

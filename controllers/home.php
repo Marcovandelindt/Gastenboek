@@ -8,6 +8,8 @@ class HomeController extends Controller {
 		$this->load->Model('Messages');
 		$messages = new Messages();
 
+		$messages->validateMessage();
+
 		$data['title'] = 'Home - Gastenboek';
 		$data['messages']  = $messages;
 		$data['error'] = $messages->error;
