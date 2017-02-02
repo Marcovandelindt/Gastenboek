@@ -1,0 +1,14 @@
+@charset 'utf-8';
+
+/* Fonts */
+
+/* CSS Document */
+body {
+	margin: 0px;
+	padding: 0px;
+}
+
+/* | Connection Status | */
+.connection-status {
+	display: none;
+}
