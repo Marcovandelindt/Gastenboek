@@ -294,6 +294,10 @@ class User extends Model
 
 	public function logoutUser()
 	{
+		$update = $this->connect->database->prepare('UPDATE users SET status = "Offline"');
+		$update->execute();
+
+		
 		session_destroy();
 		header('Location: home');
 	}
