@@ -155,6 +155,19 @@ class User extends Model {
 
 				if ($loggedin) {
 
+					$update = $this->connect->database->prepare('UPDATE users SET logins = logins+1 WHERE email = :email');
+					$update->execute([
+						'email' => $this->request->get('email'),
+					]);
+
+					// Keep in mind that when you're using localhost, the ip will be ::1
+
+					$insertip = $this->connect->database->prepare('UPDATE users SET ip_address = :ip_address, user_agent = :user_agent');
+					$insertip->execute([
+						'ip_address' => $_SERVER['REMOTE_ADDR'],
+						'user_agent' => $_SERVER['HTTP_USER_AGENT']
+					]);
+
 					unset($row['salt']);
 					unset($row['password']);
 
@@ -168,4 +181,13 @@ class User extends Model {
 			}
 		}
 	}
+
+	public function getSession() {
+
+		if (isset($_SESSION['user'])) {
+
+		}
+	}
 }
+
+# End of File
