@@ -9,6 +9,8 @@ class LoginController extends Controller {
 
 		$user = new User();
 
+		$user->loginUser();
+
 		$data['title'] 		= 'Inloggen - Gastenboek';
 		$data['user'] 		= $user;
 		$data['error'] 		= $user->error;

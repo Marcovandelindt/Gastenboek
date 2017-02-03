@@ -111,3 +111,17 @@ body {
 	height: 150px;
 	width: 100%;
 }
+
+/* | Register | */
+.register-panel {
+	margin-top: 50px;
+}
+
+.form-heading {
+	font-size: 25px;
+	border-bottom: 1px solid #ccc;
+}
+
+.add-padding {
+	padding-top: 15px;
+}

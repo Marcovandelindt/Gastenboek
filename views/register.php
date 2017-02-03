@@ -45,7 +45,7 @@
 								}
 							?>
 							<div class="input-group add-padding">
-								<input type="text" name="name" class="form-control" placeholder="Choose a username" aria-describedby="basic-addon1">
+								<input type="text" name="username" class="form-control" placeholder="Choose a username" aria-describedby="basic-addon1">
 								<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user"></span></span>
 							</div>
 							<div class="input-group add-padding">
@@ -57,7 +57,7 @@
 								<span class="input-group-addon" id="basic-addon3"><span class="fa fa-user-secret"></span></span>
 							</div>
 							<div class="input-group add-padding">
-								<input type="text" name="password_confirm" class="form-control" placeholder="Confirm your password" aria-describedby="basic-addon4">
+								<input type="password" name="password_confirm" class="form-control" placeholder="Confirm your password" aria-describedby="basic-addon4">
 								<span class="input-group-addon" id="basic-addon4"><span class="fa fa-user-secret"></span></span>
 							</div>
 							<div class="form-group add-padding">

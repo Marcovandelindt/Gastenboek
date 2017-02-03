@@ -9,7 +9,9 @@ class RegisterController extends Controller {
 
 		$user = new User();
 
-		$data['title'] 		= 'Registreren = Gastenboek';
+		$user->registerUser();
+
+		$data['title'] 		= 'Registreren - Gastenboek';
 		$data['user'] 		= $user;
 		$data['error'] 		= $user->error;
 		$data['success'] 	= $user->success;

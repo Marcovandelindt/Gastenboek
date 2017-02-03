@@ -45,11 +45,11 @@
 								}
 							?>
 							<div class="input-group add-padding">
-								<input type="email" name="email" class="form-control" placeholder="Choose your e-mailaddress" aria-describedby="basic-addon2">
+								<input type="email" name="email" class="form-control" placeholder="What's your e-mailaddress?" aria-describedby="basic-addon2">
 								<span class="input-group-addon" id="basic-addon2"><span class="glyphicon glyphicon-envelope"></span></span>
 							</div>
 							<div class="input-group add-padding">
-								<input type="password" name="password" class="form-control" placeholder="Choose your password" aria-describedby="basic-addon3">
+								<input type="password" name="password" class="form-control" placeholder="What's your password?" aria-describedby="basic-addon3">
 								<span class="input-group-addon" id="basic-addon3"><span class="fa fa-user-secret"></span></span>
 							</div>
 							<div class="form-group add-padding">
@@ -57,7 +57,8 @@
 								<button type="reset" class="btn btn-warning" name="reset">Reset</button>
 							</div>
 							<div class="form-group add-padding">
-								<a href="login">I already have an account, log me in!</a>
+								<a href="register">I don't have an account yet, let's make one!</a><br>
+								<a href="home">Take me back to the homepage, please.</a>
 							</div>
 						</form>
 					</div>
