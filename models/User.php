@@ -4,6 +4,7 @@ class User extends Model {
 
 	public $error = NULL;
 	public $success = NULL;
+	public $warning = NULL;
 
 	public function __construct() {
 		parent::__construct();
@@ -200,6 +201,67 @@ class User extends Model {
 			}
 		} else {
 			header('Location: login');
+		}
+	}
+
+	public function getWelcomeMessage() {
+
+		echo '
+			<div class="alert alert-info">
+				<p>Dear ' . $_SESSION['user']['username'] . ',<p>
+				<p>It looks like this is your first time on the Guestbook. We are very happy that you signed up for us!</p>
+				<p>We really try to get to know our members better, so we would like to know a litlle bit more about you. Before you continue, can you please tell us something about yourself below?</p>
+			</div>
+		';
+	}
+
+	public function getUserInformation() {
+
+		$get = $this->connect->database->prepare('SELECT * FROM users WHERE id = ' . $_SESSION['user']['id'] . '');
+		$get->execute();
+
+		$item = $get->fetch(PDO::FETCH_ASSOC);
+
+		if (!empty($item['username'])) {
+			echo '<li class="list-group-item"><strong>Username:</strong> @' . $item['username'] . '</li>';
+		}
+
+		if (!empty($item['first_name'])) {
+			echo '<li class="list-group-item"><strong>First name:</strong> ' . $item['first_name'] . '</li>';
+		}
+
+		if (!empty($item['last_name'])) {
+			echo '<li class="list-group-item"><strong>Last name:</strong> ' . $item['last_name'] . '</li>';
+		}
+
+		if (!empty($item['nickname'])) {
+			echo '<li class="list-group-item"><strong>Nickname: </strong>' . $item['nickname'] . '</li>';
+		}
+
+		if (!empty($item['birth_date'])) {
+			echo '<li class="list-group-item"><strong>Date of Birth: </strong>' . $item['birth_date'] . '</li>';
+		}
+
+		if (!empty($item['country'])) {
+			echo '<li class="list-group-item"><strong>Lives in: </strong>' . $item['country'] . '</li>';
+		}
+
+		if (!empty($item['bio'])) {
+			echo '<li class="list-group-item"><strong>Bio: </strong>' . $item['bio'] . '</li>';
+		}
+	}
+
+	public function logoutUser() {
+		session_destroy();
+		header('location: home');
+	}
+
+	public function checkSession() {
+
+		if ($_SESSION['user'] == FALSE) {
+
+			header('Location: errors/notloggedin.php');
+			return false;
 		}
 	}
 }
