@@ -194,6 +194,10 @@ class User extends Model
 					session_name('userdata');
 					$_SESSION['user'] = $row;
 
+					// Update status to Online
+					$update = $this->connect->database->prepare('UPDATE users SET status = "Online" WHERE id = ' . $_SESSION['user']['id'] . '');
+					$update->execute();
+
 					// Check if the user logs in for the first time
 					if ($_SESSION['user']['logins'] == 0)
 					{
@@ -297,7 +301,7 @@ class User extends Model
 		$update = $this->connect->database->prepare('UPDATE users SET status = "Offline"');
 		$update->execute();
 
-		
+
 		session_destroy();
 		header('Location: home');
 	}
