@@ -22,4 +22,4 @@ Dit is een Gastenboek gemaakt als oefenopdracht voor Loyals!
 - Creeër wachtwoord met sha256 hash + salt
 
 <strong>Profile</strong>
-- Bezig
+- Bekijk al je informatie
