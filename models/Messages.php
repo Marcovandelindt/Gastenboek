@@ -1,46 +1,61 @@
 <?php
 
-class Messages extends Model {
-
+class Messages extends Model
+{
 	public $error = NULL;
 	public $success = NULL;
 
-	public function __construct() {
+	public function __construct()
+	{
 		parent::__construct();
 	}
 
-	public function validateMessage() {
-
-		if (isset($_POST['sendMessage'])) {
-			if (empty($this->request->get('name'))) {
+	public function validateMessage()
+	{
+		if (isset($_POST['sendMessage']))
+		{
+			if (empty($this->request->get('name')))
+			{
 				return $this->error = 'You did not choose a name yet!';
 			}
 
-			if (empty($this->request->get('message'))) {
-				return $this->error = 'You didn\'t write a message yet!';
-			} else {
+			if (empty($this->request->get('image')))
+			{
+				return $this->error = 'You did not choose an image yet!';
+			}
 
+			if (empty($this->request->get('message')))
+			{
+				return $this->error = 'You did not write your message yet!';
+			} 
+			else
+			{
 				$insert = $this->connect->database->prepare('INSERT INTO messages (name, image, message) VALUES (:name, :image, :message)');
 				$insert->execute([
-					'name' 		=> $this->request->get('name'),
-					'image' 	=> $this->request->get('image'),
-					'message' 	=> $this->request->get('message')
+					'name' => $this->request->get('name'),
+					'image' => $this->request->get('image'),
+					'message' => $this->request->get('message')
 				]);
 
-				if ($insert) {
+				if ($insert)
+				{
 					return $this->success = 'Dear ' . $this->request->get('name') . '. Thanx for your message!';
-				} else {
-					return $this->error = 'It looks like something went wrong. Please try again later...';
+				}
+				else
+				{
+					return $this->error = 'Something went wrong while posting your message. Please try again later!';
 				}
 			}
 		}
 	}
 
-	public function showMessages() {
+	public function showMessages()
+	{
 		$get = $this->connect->database->prepare('SELECT * FROM messages ORDER BY date DESC');
 		$get->execute();
 
-		foreach ($get as $item) {
+		foreach ($get as $item)
+		{
 			echo '
 				<div class="col-sm-12">
 					<div class="message">
@@ -64,12 +79,16 @@ class Messages extends Model {
 		}
 	}
 
-	public function showRecentMessages() {
+	public function showRecentMessages()
+	{
 		$get = $this->connect->database->prepare('SELECT name, date FROM messages ORDER BY date DESC');
 		$get->execute();
 
-		foreach ($get as $item) {
+		foreach ($get as $item)
+		{
 			echo '<li><strong>' . $item['name'] . '</strong><i class="pull-right date_time">' . date('d-m-Y, H:i', strtotime($item['date'])) . '</i></li>';
 		}
 	}
 }
+
+# End of File
