@@ -313,6 +313,26 @@ class User extends Model
 			header('Location: login');
 		}
 	}
+
+	public function getOnlineUsers()
+	{
+		$get = $this->connect->database->prepare('SELECT * FROM users WHERE status = "Online"');
+		$get->execute();
+
+		$count = $get->rowCount();
+
+		if ($count == 0)
+		{
+			echo 'There currently aren\'t any users online...';
+		} 
+		else
+		{
+			foreach($get as $item)
+			{
+				echo '<li><strong>' . $item['username'] . '</strong><span class="label label-success pull-right">Online!</span></li>';
+			}
+		}
+	}
 }
 
 # End of File

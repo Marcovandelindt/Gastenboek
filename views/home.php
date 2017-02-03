@@ -185,6 +185,9 @@
 									<div class="page-header">
 										<p>Online members:</p>
 									</div>
+									<ul>
+										<?php $user->getOnlineUsers(); ?>
+									</ul>
 								</div>
 							</div>
 						</div>
