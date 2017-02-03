@@ -9,10 +9,13 @@ class ProfileController extends Controller {
 
 		$user = new User();
 
+		$user->checkSession();
+
 		$data['title'] = 'My Profile - Gastenboek';
 		$data['user'] = $user;
 		$data['error'] = $user->error;
 		$data['success'] = $user->success;
+		$data['warning'] = $user->warning;
 
 		$this->load->View('profile', $data);
 	}
