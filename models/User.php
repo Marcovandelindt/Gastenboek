@@ -110,6 +110,62 @@ class User extends Model {
 
 	public function loginUser() {
 
-		
+		if (isset($_POST['login'])) {
+
+			// Validate the e-mailaddress input field
+			if (empty($this->request->get('email'))) {
+				return $this->error = 'Your e-mailaddress cannot be empty!';
+			}
+
+			if (preg_match("#<script(.*?)>(.*?)</script>#is", $this->request->get('email'))) {
+				return $this->error = 'You cannot use any JavaScript in the e-mailaddress!';
+			}
+
+			// Validate the Password input field
+			if (empty($this->request->get('password'))) {
+				return $this->error = 'Your password cannot be empty!';
+			}
+
+			if (preg_match("#<script(.*?)>(.*?)</script>#is", $this->request->get('password'))) {
+				return $this->error = 'You cannot use any JavaScript in your password!';
+			} else {
+
+				// Loggin in the User
+
+				$select = $this->connect->database->prepare('SELECT * FROM users WHERE email = :email');
+				$select->execute([
+					'email' => $this->request->get('email')
+				]);
+
+				$loggedin = FALSE;
+
+				$row = $select->fetch(PDO::FETCH_ASSOC);
+
+				if ($row) {
+					$check_password = hash('sha256', $this->request->get('password') . $row['salt']);
+
+					for ($round = 0; $round < 65536; $round++) {
+						$check_password = hash('sha256', $this->request->get('password') . $row['salt']);
+					}
+
+					if ($check_password === $row['password']) {
+						$loggedin = TRUE;
+					}
+				}
+
+				if ($loggedin) {
+
+					unset($row['salt']);
+					unset($row['password']);
+
+					$_SESSION['user'] = $row;
+
+					header('Location: profile');
+					die('Redirecting to your profile');
+				} else {
+					return $this->error = 'You could not be logged in. Please try again later.';
+				}
+			}
+		}
 	}
 }
