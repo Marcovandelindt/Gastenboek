@@ -10,10 +10,16 @@ class HomeController extends Controller {
 
 		$messages->validateMessage();
 
+		$this->load->Model('User');
+		$user = new User();
+
+		$user->checkSession();
+
 		$data['title'] = 'Home - Gastenboek';
 		$data['messages']  = $messages;
 		$data['error'] = $messages->error;
 		$data['success'] = $messages->success;
+		$data['user'] = $user;
 
 		$this->load->View('home', $data);
 	}

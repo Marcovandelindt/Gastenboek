@@ -55,6 +55,56 @@
 													<img src="assets/images/generalplaceholder.png">
 												</div>
 											</div>
+											<?php
+												if (isset($_SESSION['user']) == TRUE) {
+											?>
+											<div class="col-sm-10">
+												<form class="post-message" method="POST">
+													<label for="welcome-message" class="label-control">
+														Welcome <?php echo $_SESSION['user']['username']; ?>. What would you like to share?
+													</label>
+													<div class="row">
+														<div class="col-sm-8">
+															<div class="form-group">
+																<input type="text" name="name" class="form-control" value="<?php echo $_SESSION['user']['username']; ?>"> 
+															</div>
+														</div>
+														<div class="col-sm-3">
+															<div class="form-group">
+																<select class="form-control" name="image" placeholder="Choose an image">
+																	<option disabled>Choose your image</option>
+																	<option>generalplaceholder.png</option>
+																	<option>placeholder.png</option>
+																	<option>placeholdermale.jpg</option>
+																	<option>placeholderfemale.png</option>
+																	<option>placeholderdog.jpg</option>
+																	<option>placeholdercat.jpg</option>
+																</select>
+															</div>
+														</div>
+														<div class="col-sm-1">
+															<div class="form-group">
+																<span class="glyphicon glyphicon-info-sign image-info" data-toggle="modal" data-target="#imageModal"></span>
+															</div>
+														</div>
+													</div>
+													<div class="row">
+														<div class="col-sm-10">
+															<div class="form-group">
+																<textarea class="form-control" name="message" placeholder="<?php echo $_SESSION['user']['username']; ?>, what would you like to say?"></textarea>
+															</div>
+														</div>
+														<div class="col-sm-2">
+															<button type="submit" class="btn btn-success sender" name="sendMessage">
+																Send it!
+															</button>
+														</div>
+													</div>
+												</form>
+											</div>
+											<?php
+												} else {
+											?>
 											<div class="col-sm-10">
 												<form class="form post-message" method="POST">
 													<label for="welcome-message" class="label-control">
@@ -99,6 +149,9 @@
 													</div>
 												</form>
 											</div>
+											<?php
+												}
+											?>
 										</div>
 									</div>
 								</div>
