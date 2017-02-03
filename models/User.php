@@ -333,6 +333,26 @@ class User extends Model
 			}
 		}
 	}
+
+	public function getOfflineUsers()
+	{
+		$get = $this->connect->database->prepare('SELECT * FROM users WHERE status = "Offline"');
+		$get->execute();
+
+		$count = $get->rowCount();
+
+		if ($count == 0)
+		{
+			echo 'Wuuut, eveyone is online!';
+		}
+		else
+		{
+			foreach ($get as $item)
+			{
+				echo '<li><strong>' . $item['username'] . '</strong><span class="label label-danger pull-right">Offline!</span></li>';
+			}
+		}
+	}
 }
 
 # End of File
