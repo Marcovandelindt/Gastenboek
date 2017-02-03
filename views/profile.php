@@ -10,7 +10,23 @@
 
 		<?php require 'requirements/header.html'; ?>
 	</head>
-	<body>		
+	<body>
+		<nav class="navbar navbar-default navbar-static-top">
+			<div class="container-fluid">
+
+			</div>
+		</nav>
+		<?php
+			if (!isset($_GET['details'])) {
+		?>
+		<p>Dit is niet de eerste keer dat je inlogd!</p>
+		<?php
+			} else {
+		?>
+
+		<?php
+			}
+		?>
 
 		<?php require 'requirements/footer.html'; ?>
 	</body>
