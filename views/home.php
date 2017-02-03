@@ -185,5 +185,11 @@
 			</div>
 		</div>
 	<?php require 'requirements/footer.html'; ?>
+
+	<script type="text/javascript">
+			$('.remover').on('click', function() {
+					$(this).parent().remove();
+			});
+	</script>
 	</body>
 </html>
