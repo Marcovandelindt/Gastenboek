@@ -53,7 +53,7 @@
 								<span class="input-group-addon" id="basic-addon3"><span class="fa fa-user-secret"></span></span>
 							</div>
 							<div class="form-group add-padding">
-								<button type="submit" class="btn btn-success login-button" name="login">Register</button>
+								<button type="submit" class="btn btn-success login-button" name="login">Login</button>
 								<button type="reset" class="btn btn-warning" name="reset">Reset</button>
 							</div>
 							<div class="form-group add-padding">
