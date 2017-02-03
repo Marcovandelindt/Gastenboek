@@ -249,6 +249,10 @@ class User extends Model {
 		if (!empty($item['bio'])) {
 			echo '<li class="list-group-item"><strong>Bio: </strong>' . $item['bio'] . '</li>';
 		}
+
+		if (!empty($item['logins'])) {
+			echo '<li class="list-group-item"><strong>Logins: </strong>' . $item['logins'] . '</li>';
+		}
 	}
 
 	public function logoutUser() {
