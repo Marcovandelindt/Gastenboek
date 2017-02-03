@@ -13,8 +13,6 @@ class HomeController extends Controller {
 		$this->load->Model('User');
 		$user = new User();
 
-		$user->checkSession();
-
 		$data['title'] = 'Home - Gastenboek';
 		$data['messages']  = $messages;
 		$data['error'] = $messages->error;
