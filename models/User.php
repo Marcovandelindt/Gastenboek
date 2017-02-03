@@ -150,6 +150,8 @@ class User extends Model {
 
 					if ($check_password === $row['password']) {
 						$loggedin = TRUE;
+					} else {
+						return $this->error = 'This password dit not match the e-mail adress. Please try again.';
 					}
 				}
 
