@@ -190,6 +190,16 @@
 									</ul>
 								</div>
 							</div>
+							<div class="col-sm-12">
+								<div class="recent-posts">
+									<div class="page-header">
+										<p>Online members:</p>
+									</div>
+									<ul>
+										<?php $user->getOfflineUsers(); ?>
+									</ul>
+								</div>
+							</div>
 						</div>
 						<!-- End of the right side of the Page -->
 
