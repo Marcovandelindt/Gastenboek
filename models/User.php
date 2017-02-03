@@ -166,8 +166,8 @@ class User extends Model {
 
 					// Keep in mind that when you're using localhost, the ip will be ::1
 
-					$insertip = $this->connect->database->prepare('UPDATE users SET ip_address = :ip_address, user_agent = :user_agent');
-					$insertip->execute([
+					$insert = $this->connect->database->prepare('UPDATE users SET ip_address = :ip_address, user_agent = :user_agent');
+					$insert->execute([
 						'ip_address' => $_SERVER['REMOTE_ADDR'],
 						'user_agent' => $_SERVER['HTTP_USER_AGENT']
 					]);
@@ -187,6 +187,19 @@ class User extends Model {
 					return $this->error = 'You could not be logged in. Please try again later.';
 				}
 			}
+		}
+	}
+
+	public function isLoggedIn() {
+		if (isset($_SESSION['user']) && $_SESSION['user'] == TRUE) {
+			if ($_SESSION['user']['logins'] == 0) {
+				header('Location: profile&details');
+				exit;
+			} else {
+				header('Location: profile');
+			}
+		} else {
+			header('Location: login');
 		}
 	}
 }
