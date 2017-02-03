@@ -316,7 +316,7 @@ class User extends Model
 
 	public function getOnlineUsers()
 	{
-		$get = $this->connect->database->prepare('SELECT * FROM users WHERE status = "Online"');
+		$get = $this->connect->database->prepare('SELECT * FROM users WHERE status = "Online" LIMIT 5');
 		$get->execute();
 
 		$count = $get->rowCount();
@@ -336,7 +336,7 @@ class User extends Model
 
 	public function getOfflineUsers()
 	{
-		$get = $this->connect->database->prepare('SELECT * FROM users WHERE status = "Offline"');
+		$get = $this->connect->database->prepare('SELECT * FROM users WHERE status = "Offline" LIMIT 5');
 		$get->execute();
 
 		$count = $get->rowCount();
