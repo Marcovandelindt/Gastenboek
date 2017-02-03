@@ -52,12 +52,12 @@ body {
 }
 
 .image {
-	height: 100px;
+	height: 200px;
 	width: 100%;
 }
 
 .image img {
-	height: 100px !important;
+	height: 200px !important;
 	width: 100% !important;
 	padding-bottom: 15px;
 }
@@ -83,6 +83,10 @@ body {
 .posteddate {
 	color: grey;
 	font-style: italic;
+}
+
+.remover:hover {
+	cursor: pointer;
 }
 
 /* | Right Side | */
