@@ -141,6 +141,8 @@ class User extends Model {
 
 				$row = $select->fetch(PDO::FETCH_ASSOC);
 
+				// Check if passwords exists in database
+
 				if ($row) {
 					$check_password = hash('sha256', $this->request->get('password') . $row['salt']);
 
@@ -173,21 +175,18 @@ class User extends Model {
 					unset($row['salt']);
 					unset($row['password']);
 
+					session_name('userdata');
 					$_SESSION['user'] = $row;
 
-					header('Location: profile');
-					die('Redirecting to your profile');
+					if ($_SESSION['user']['logins'] == 0) {
+						header('Location: profile&details');
+					} else {
+						header('Location: profile');
+					}
 				} else {
 					return $this->error = 'You could not be logged in. Please try again later.';
 				}
 			}
-		}
-	}
-
-	public function getSession() {
-
-		if (isset($_SESSION['user'])) {
-
 		}
 	}
 }
