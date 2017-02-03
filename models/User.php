@@ -298,7 +298,7 @@ class User extends Model
 
 	public function logoutUser()
 	{
-		$update = $this->connect->database->prepare('UPDATE users SET status = "Offline"');
+		$update = $this->connect->database->prepare('UPDATE users SET status = "Offline" WHERE id = ' . $_SESSION['user']['id'] . '');
 		$update->execute();
 
 
