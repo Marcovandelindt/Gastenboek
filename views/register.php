@@ -21,7 +21,29 @@
 							</div>
 						</div>
 						<form class="form" method="POST">
-							
+							<?php
+								if (isset($error)) {
+									echo '
+										<div class="col-sm-12 add-padding">
+											<div class="alert alert-danger">
+												<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;' . $error . '
+												<i class="glyphicon glyphicon-remove pull-right remover"></i>
+											</div>
+										</div>
+									';
+								}
+
+								if (isset($success)) {
+									echo '
+										<div class="col-sm-12 add-padding">
+											<div class="alert alert-success">
+												<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;' . $success . '
+												<i class="glyphicon glyphicon-remove pull-right remover"></i>
+											</div>
+										</div>
+									';
+								}
+							?>
 							<div class="input-group add-padding">
 								<input type="text" name="name" class="form-control" placeholder="Choose a username" aria-describedby="basic-addon1">
 								<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-user"></span></span>
