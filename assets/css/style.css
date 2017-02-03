@@ -25,7 +25,7 @@ body {
 }
 
 /* | General Styles | */
-.section  {
+.home-section  {
 	margin-top: 150px !important;
 }
 
@@ -124,4 +124,26 @@ body {
 
 .add-padding {
 	padding-top: 15px;
+}
+
+/* | Profile | */
+.logout {
+	width: 100px;
+	margin-top: 8px;
+	margin-left: 30px;
+}
+
+.profile-image {
+	height: 450px !important;
+	width: 100%;
+}
+
+.profile .thumbnail {
+	background-color: #f3f6f8 !important;
+	border: none !important;
+}
+
+.profile .list-group-item {
+	margin-left: -10px;
+	margin-right: -10px;
 }
