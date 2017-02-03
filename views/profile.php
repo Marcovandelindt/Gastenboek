@@ -27,7 +27,7 @@
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="home"><i class="fa fa-home"></i>&nbsp;Homepage</a></li>
 						<li class="active"><a href="profile"><i class="fa fa-user-circle"></i>&nbsp;Profile</a></li>
-						<li><a href="logout"><i class="fa fa-user"></i>Logout</a></li>
+						<li><a href="logout"><i class="fa fa-user"></i>&nbsp;Logout</a></li>
 					</ul>
 				</div>		
 			</div>
