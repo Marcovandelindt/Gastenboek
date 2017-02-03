@@ -3,6 +3,6 @@
 define('hostname', 'localhost');
 define('dbname', 'gastenboek');
 define('username', 'root');
-define('password', 'testtest');
+define('password', 'mysql');
 
 # End of File
