@@ -8,7 +8,7 @@ class User extends Model
 
 	public function __construct()
 	{
-		parent::__construct()
+		parent::__construct();
 	}
 
 	public function registerUser()
@@ -125,7 +125,7 @@ class User extends Model
 				return $this->error = 'Your e-mailaddress cannot be empty!';
 			}
 
-			if (preg_match("#<script(.*?)>(.*?)</script>#is", $this->Request->get('email')))
+			if (preg_match("#<script(.*?)>(.*?)</script>#is", $this->request->get('email')))
 			{
 				return $this->error = 'Your e-mailaddress cannot contain any JavaScript!';
 			}
@@ -286,7 +286,7 @@ class User extends Model
 		}
 
 		// Check all the logins
-		if (!empty($items['logins']))
+		if (!empty($item['logins']))
 		{
 			echo '<li class="list-group-item"><strong>Logins: </strong>' . $item['logins'] . '</li>';
 		}
@@ -298,7 +298,7 @@ class User extends Model
 		header('Location: home');
 	}
 
-	public function chechSession()
+	public function checkSession()
 	{
 		if ($_SESSION['user'] == FALSE)
 		{
