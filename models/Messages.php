@@ -57,22 +57,14 @@ class Messages extends Model
 		foreach ($get as $item)
 		{
 			echo '
-				<div class="col-sm-12">
-					<div class="message">
-						<div class="row">
-							<div class="col-sm-2">
-								<div class="image">
-									<img src="assets/images/' . $item['image'] . '">
-								</div>
-							</div>
-							<div class="col-sm-10">
-								<div class="col-sm-12">
-									<label for="postedby" class="label-control">Posted by&nbsp;' . $item['name'] . ':</label>
-									<div class="text">' . $item['message'] . '</div>
-									<label for="posteddate" class="label-control posteddate">' . date('d-m-Y, H:i', strtotime($item['date'])) . '</label>
-								</div>
-							</div>
-						</div>
+				<div class="media">
+					<div class="media-left">
+						<img class="media-object" src="assets/images/' . $item['image'] . '">
+					</div>
+					<div class="media-body">
+						<p class="name">' . $item['name'] . '</p>
+						<p class="message">' . $item['message'] . '</p>
+						<p class="date"><i>' . $item['date'] . '</i></p>
 					</div>
 				</div>
 			';
@@ -81,13 +73,32 @@ class Messages extends Model
 
 	public function showRecentMessages()
 	{
-		$get = $this->connect->database->prepare('SELECT name, date FROM messages ORDER BY date DESC');
+		$get = $this->connect->database->prepare('SELECT name, image, date FROM messages ORDER BY date DESC');
 		$get->execute();
 
 		foreach ($get as $item)
 		{
-			echo '<li><strong>' . $item['name'] . '</strong><i class="pull-right date_time">' . date('d-m-Y, H:i', strtotime($item['date'])) . '</i></li>';
+			echo '
+				<div class="media">
+					<div class="media-left">
+						<img class="media-object" src="assets/images/' . $item['image'] . '">
+					</div>
+					<div class="media-body">
+						<p class="name">' . $item['name'] . '</p>
+						<p class="date"><i>' . $item['date'] . '</i></p>
+					</div>
+				</div>
+			';
 		}
+	}
+
+	public function countMessages() {
+		$count = $this->connect->database->prepare('SELECT * FROM messages');
+		$count->execute();
+
+		$rows = $count->rowCount();
+
+		echo $rows;
 	}
 }
 
