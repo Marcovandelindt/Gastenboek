@@ -321,16 +321,13 @@ class User extends Model
 
 		$count = $get->rowCount();
 
-		if ($count == 0)
+		if ($count == 0) 
 		{
-			echo 'There currently aren\'t any users online...';
-		} 
+			echo $count;
+		}
 		else
 		{
-			foreach($get as $item)
-			{
-				echo '<li><strong>' . $item['username'] . '</strong><span class="label label-success pull-right">Online!</span></li>';
-			}
+			echo $count;
 		}
 	}
 
@@ -355,14 +352,26 @@ class User extends Model
 	}
 
 	public function getAllUsers() {
-		$get = $this->connect->database->prepare('SELECT username, email FROM users ORDER BY email ASC LIMIT 5');
+		$get = $this->connect->database->prepare('SELECT username, email, joined_date FROM users ORDER BY joined_date DESC LIMIT 5');
 		$get->execute();
 
 		foreach ($get as $item) {
 			echo '
-				<li class="list-group-item">' . $item['username'] . '</li>
+				<li class="list-group-item">
+					<p>' . $item['username'] . '</p>
+					<span class="label label-success">' . date('d-m-Y H:i', strtotime($item['joined_date'])) . '</span>
+				</li>
 			';
 		}
+	}
+
+	public function countUsers() {
+		$count = $this->connect->database->prepare('SELECT * FROM users');
+		$count->execute();
+
+		$rows = $count->rowCount();
+
+		echo $rows;
 	}
 }
 
