@@ -353,6 +353,17 @@ class User extends Model
 			}
 		}
 	}
+
+	public function getAllUsers() {
+		$get = $this->connect->database->prepare('SELECT username, email FROM users ORDER BY email ASC LIMIT 5');
+		$get->execute();
+
+		foreach ($get as $item) {
+			echo '
+				<li class="list-group-item">' . $item['username'] . '</li>
+			';
+		}
+	}
 }
 
 # End of File
