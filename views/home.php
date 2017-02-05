@@ -2,260 +2,193 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
-		<meta name="author" content="Marco van de Lindt">
-		<meta name="description" content="Klein gastenboek in opdracht van Loyals">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" description="Marco van de Lindt">
+		<meta name="description" content="Simpel gastenboekje">
 		<title><?php echo $title; ?></title>
 
 		<?php require 'requirements/header.html'; ?>
 	</head>
-	<body>
-		<div class="container-fluid">
-			<div class="header">
-				<div class="col-md-4 heading">
-					<h2>Gastenboek!</h2>
-					<p>Laat je ook een berichtje achter?</p>
-				</div>
-			</div>
-
-			<div class="section">
+	<body>	
+		<div class="container">
+			<nav class="navbar navbar-default navbar-static-top top-nav">
 				<div class="container-fluid">
-					<div class="content-wrapper">
-					<div class="row">
-						<!-- Left side of the Page -->
-						<div class="col-md-8 left-side">
-							<div class="col-md-12 messages-wrapper">
-								<div class="col-sm-12">
-									<div class="send-message">
-										<?php
-											if (isset($error)) {
-												echo '
-													<div class="alert alert-danger">
-														<i class="glyphicon glyphicon-remove-circle"></i>&nbsp;
-														' . $error . '
-														<i class="glyphicon glyphicon-remove pull-right remover"></i>
-													</div>
-												';
-											}
+					<div class="navbar-header">
+						<a class="navbar-brand" href="home">Guestbook</a>
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav" aria-expanded="false">
+							<span class="sr-only">Toggle Navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
 
-											if (isset($success)) {
-												echo '
-													<div class="alert alert-success">
-														<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;
-														' . $success . '
-														<i class="glyphicon glyphicon-remove pull-right remover"></i>
-													</div>
-												';
-											}
-										?>
-										<div class="row">
-											<div class="col-sm-2">
-												<div class="image">
-													<img src="assets/images/generalplaceholder.png">
-												</div>
-											</div>
-											<?php
-												if (isset($_SESSION['user']) == TRUE) {
-											?>
-											<div class="col-sm-10">
-												<form class="post-message" method="POST">
-													<label for="welcome-message" class="label-control">
-														Welcome <?php echo $_SESSION['user']['username']; ?>. What would you like to share?
-													</label>
-													<div class="row">
-														<div class="col-sm-8">
-															<div class="form-group">
-																<input type="text" name="name" class="form-control" value="<?php echo $_SESSION['user']['username']; ?>"> 
-															</div>
-														</div>
-														<div class="col-sm-3">
-															<div class="form-group">
-																<select class="form-control" name="image" placeholder="Choose an image">
-																	<option disabled>Choose your image</option>
-																	<option>generalplaceholder.png</option>
-																	<option>placeholder.png</option>
-																	<option>placeholdermale.jpg</option>
-																	<option>placeholderfemale.png</option>
-																	<option>placeholderdog.jpg</option>
-																	<option>placeholdercat.jpg</option>
-																</select>
-															</div>
-														</div>
-														<div class="col-sm-1">
-															<div class="form-group">
-																<span class="glyphicon glyphicon-info-sign image-info" data-toggle="modal" data-target="#imageModal"></span>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-10">
-															<div class="form-group">
-																<textarea class="form-control" name="message" placeholder="<?php echo $_SESSION['user']['username']; ?>, what would you like to say?"></textarea>
-															</div>
-														</div>
-														<div class="col-sm-2">
-															<button type="submit" class="btn btn-success sender" name="sendMessage">
-																Send it!
-															</button>
-														</div>
-													</div>
-												</form>
-											</div>
-											<?php
-												} else {
-											?>
-											<div class="col-sm-10">
-												<form class="form post-message" method="POST">
-													<label for="welcome-message" class="label-control">
-														Hello there! What's up?
-													</label>
-													<div class="row">
-														<div class="col-sm-8">
-															<div class="form-group">
-																<input type="text" name="name" class="form-control" placeholder="What's your name?">
-															</div>
-														</div>
-														<div class="col-sm-3">
-															<div class="form-group">
-																<select class="form-control" name="image" placeholder="Choose an image">
-																	<option disabled>Choose your image</option>
-																	<option>generalplaceholder.png</option>
-																	<option>placeholder.png</option>
-																	<option>placeholdermale.jpg</option>
-																	<option>placeholderfemale.png</option>
-																	<option>placeholderdog.jpg</option>
-																	<option>placeholdercat.jpg</option>
-																</select>
-															</div>
-														</div>
-														<div class="col-sm-1">
-															<div class="form-group">
-																<span class="glyphicon glyphicon-info-sign image-info" data-toggle="modal" data-target="#imageModal"></span>
-															</div>
-														</div>
-													</div>
-													<div class="row">
-														<div class="col-sm-10">
-															<div class="form-group">
-																<textarea class="form-control" name="message" placeholder="What would you like to say?"></textarea>
-															</div>
-														</div>
-														<div class="col-sm-2">
-															<button type="submit" class="btn btn-success sender" name="sendMessage">
-																Send it!
-															</button>
-														</div>
-													</div>
-												</form>
-											</div>
-											<?php
-												}
-											?>
-										</div>
-									</div>
-								</div>
-								<?php echo $messages->showMessages(); ?>
-							</div>
-						</div>
-						<!-- End of the left side of the Page -->
+					<?php
+						if (isset($_SESSION['user'])) {
+					?>
 
-						<!-- Right side of the Page -->
-						<div class="col-md-4 right-side">
-							<div class="col-sm-12">
-								<div class="search-bar">
-									<div class="input-group">
-										<input type="text" name="search" class="form-control" placeholder="Search..." aria-describedby="basic-addon1">
-										<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-search"></span></span>
-									</div>
+					<?php 
+						} else {
+					?>
+					<div class="collapse navbar-collapse" id="nav">
+						<ul class="nav navbar-nav navbar-right">
+							<li class="active"><a href="home">Homepage</a></li>
+							<li><a href="login">Login</a></li>
+							<li><a href="register">Register</a></li>
+						</ul>
+					</div>
+					<?php
+						}
+					?>
+				</div>
+			</nav>
+
+			<!-- Continuing with the rest of the page -->
+			<div class="section">
+				<div class="row">
+					<!-- Left side of the page -->
+					<div class="col-md-3">
+						<div class="inner-wrapper top-wrapper">
+							<div class="panel panel-default recent-members default-panel">
+								<div class="panel-heading">
+									<p>Newest Members</p>
 								</div>
-							</div>
-							<div class="col-sm-12">
-								<div class="recent-posts">
-									<div class="page-header">
-										<p>Latest messages:</p>
-									</div>
-									<ul>
-										<?php $messages->showRecentMessages(); ?>
+								<div class="panel-body">
+									<ul class="list-group">
+										<?php $user->getAllUsers(); ?>
 									</ul>
 								</div>
 							</div>
-							<div class="col-sm-12">
-								<div class="recent-posts">
-									<div class="page-header">
-										<p>Online members:</p>
-									</div>
-									<ul>
-										<?php $user->getOnlineUsers(); ?>
-									</ul>
+
+							<div class="panel panel-default recent-posts default-panel">
+								<div class="panel-heading">
+									<p>Recent Posts</p>
 								</div>
-							</div>
-							<div class="col-sm-12">
-								<div class="recent-posts">
-									<div class="page-header">
-										<p>Online members:</p>
-									</div>
-									<ul>
-										<?php $user->getOfflineUsers(); ?>
-									</ul>
+								<div class="panel-body">
+									<?php echo $messages->showRecentMessages(); ?>
 								</div>
 							</div>
 						</div>
-						<!-- End of the right side of the Page -->
+					</div>
+					<!-- End of the left side of the page -->
 
-						<!-- Here are the Modals stored -->
-						<div class="modal fade" id="imageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalLabel">
-							<div class="modal-dialog" role="document">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="imageModalLabel">Information about the image</h5>
+					<!-- Middle of the page -->
+					<div class="col-md-6">
+						<div class="top-wrapper">
+							<div id="carousel" class="carousel slide" data-ride="carousel">
+								<ol class="carousel-indicators">
+									<li data-target="#carousel" data-slide-to="0" class="active"></li>
+									<li data-target="#caoursel" data-slide-to="1"></li>
+								</ol>
+								<div class="carousel-inner" role="listbox">
+									<div class="item active">
+										<img class="d-block img-fluid carousel-img" src="http://buddywp.wpengine.com/wp-content/uploads/photodune-3382849-mountain3-s1-1003x480.jpg">
+										<div class="carousel-caption d-none d-md-block">
+											<h3>Welcome to Guestbook</h3>
+										</div>
 									</div>
-									<div class="modal-body">
-										<p><strong>Right now, you can't upload your own photos... yet!</strong></p>
-										<p>We're working hard on making it possible for everyone to upload their own photos, but for now you have to do with the photo's we've selected for you.</p>
-										<div class="row">
-											<div class="col-md-4">
-												<label for="generalplaceholder" class="label-control">General Placeholder:</label>
-												<img src="assets/images/generalplaceholder.png" class="modal-image">
-											</div>
-											<div class="col-md-4">
-												<label for="placeholder1" class="label-control">Placeholder 1:</label>
-												<img src="assets/images/placeholder1.jpg" class="modal-image">
-											</div>
-											<div class="col-md-4">
-												<label for="placeholdermale" class="label-control">Placeholder Male:</label>
-												<img src="assets/images/placeholdermale.jpg" class="modal-image">
-											</div>
+
+									<div class="item">
+										<img class="d-block img-fluid carousel-img" src="assets/images/carousel.png">
+										<div class="carousel-caption d-none d-md-block">
+											<h3>Share your story</h3>
 										</div>
-										<div class="row" style="margin-top: 15px;">
-											<div class="col-md-4">
-												<label for="placeholderfemale" class="label-control">Placeholder Female:</label>
-												<img src="assets/images/placeholderfemale.png" class="modal-image">
-											</div>
-											<div class="col-md-4">
-												<label for="placeholderdog" class="label-control">Placeholder Dog:</label>
-												<img src="assets/images/placeholderdog.jpg" class="modal-image">
-											</div>
-											<div class="col-md-4">
-												<label for="placeholdercat" class="label-control">Placeholder Cat:</label>
-												<img src="assets/images/placeholdercat.jpg" class="modal-image">
-											</div>
-										</div>
-										<p style="margin-top: 15px;"><strong>We're sorry for the inconvienience, but we'll try to have it working as soon as possible!</strong></p>
+									</div>
+								</div>
+							</div>
+
+							<div class="top-wrapper" style="margin-top: 15px;">
+								<div class="panel panel-default messages">
+									<div class="panel-heading">
+										<p>Recent Messages</p>
+									</div>
+									<div class="panel-body">
+										<?php if (isset($_SESSION['user'])) {
+									?>
+
+									<?php
+										} else {
+											echo $messages->showMessages();
+									?>
+
+									<?php
+										}
+									?>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
+					<!-- End of the middle of the page -->
+
+					<!-- Right side of the page -->
+					<div class="col-md-3">
+					<?php
+						if (isset($_SESSION['user'])) {
+
+					?>
+
+					<?php
+						} else {
+					?>
+						<div class="panel panel-default login-panel default-panel">
+							<div class="panel-heading">
+								<p>Log me in!</p>
+							</div>
+							<div class="panel-body">
+								<div class="form-group">
+									<label for="email" class="label-control">E-mail address:</label>
+									<input type="text" name="email" class="form-control" placeholder="E-mailaddress">
+								</div>
+								<div class="form-group">
+									<label for="password" class="label-control">Password:</label>
+									<input type="password" name="password" class="form-control" placeholder="Password">
+								</div>
+								<div class="form-group">
+									<button type="submit" class="btn btn-primary" name="login">Login</button>
+								</div>
+							</div>
+						</div>
+					<?php
+						}
+					?>
+						<div class="panel panel-default default-panel statistics">
+							<div class="panel-heading">
+								<p>Statistics</p>
+							</div>
+							<div class="panel-body">
+								<ul class="list-group">
+									<li class="list-group-item">
+										<i class="fa fa-pencil"></i>&nbsp;Messages<span class="pull-right"><?php echo $messages->countMessages(); ?>
+									</li>
+									<li class="list-group-item">
+										<i class="fa fa-users"></i>&nbsp;Users<span class="pull-right"><?php echo $user->countUsers(); ?>
+									</li>
+									<li class="list-group-item">
+										<i class="fa fa-bell"></i>&nbsp;Online Users<span class="pull-right"><?php echo $user->getOnlineUsers(); ?>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- End of the right side of the page -->
 				</div>
 			</div>
 		</div>
-	<?php require 'requirements/footer.html'; ?>
 
-	<script type="text/javascript">
-			$('.remover').on('click', function() {
-					$(this).parent().remove();
-			});
-	</script>
+		<?php require 'requirements/footer.html'; ?>
+
+		<script type="text/javascript">
+			function Blink(selector) {
+				$(selector).fadeOut('slow', function() {
+					$(this).fadeIn('slow', function() {
+						Blink(this);
+					});
+				});
+			}
+
+			Blink('.fa-bell');
+		</script>
 	</body>
 </html>
