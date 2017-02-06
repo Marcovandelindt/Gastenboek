@@ -175,6 +175,15 @@ body {
 	margin-top: 15px;
 }
 
+/* | Login | */
+.register-panel {
+	margin-top: 50px;
+}
+
+.add-padding {
+	padding-top: 15px;
+}
+
 /* | Profile | */
 .profile .thumbnail {
 	background-color: #f0f0ed !important;
