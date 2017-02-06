@@ -27,7 +27,14 @@
 					<?php
 						if (isset($_SESSION['user'])) {
 					?>
-
+					<div class="collapse navbar-collapse" id="nav">
+						<ul class="nav navbar-nav navbar-right">
+							<li class="active"><a href="home">Homepage</a></li>
+							<li><a href="">My Friends</a></li>
+							<li><a href="profile">My Profile</a></li>
+							<li><a href="logout">Logout</a></li>
+						</ul>
+					</div>
 					<?php 
 						} else {
 					?>
@@ -69,6 +76,27 @@
 									<?php echo $messages->showRecentMessages(); ?>
 								</div>
 							</div>
+
+							<div class="panel panel-default online-users default-panel">
+								<div class="panel-heading">
+									<p>Online Users</p>
+								</div>
+								<div class="panel-body">
+									<ul class="list-group">
+										<?php echo $user->getOnlineUsers(); ?>
+									</ul>
+								</div>
+							</div>
+							<div class="panel panel-default offline-users default-panel">
+								<div class="panel-heading">
+									<p>Offline Users</p>
+								</div>
+								<div class="panel-body">
+									<ul class="list-group">
+										<?php echo $user->getOfflineUsers(); ?>
+									</ul>
+								</div>
+							</div>
 						</div>
 					</div>
 					<!-- End of the left side of the page -->
@@ -106,7 +134,39 @@
 									<div class="panel-body">
 										<?php if (isset($_SESSION['user'])) {
 									?>
-
+									<form class="form" method="POST">
+										<label for="welcome-text">Welcome back, <?php echo $_SESSION['user']['username']; ?>. What would you like to share?</label>
+										<?php
+											if (isset($error)) {
+												echo '
+													<div class="alert alert-danger">
+														<i class="fa fa-exclamation"></i>&nbsp;' . $error . '<i class="fa fa-window-close pull-right remover"></i>
+													</div>
+												';
+											}
+										?>
+										<div class="media">
+											<div class="media-left">
+												<img src="assets/images/placeholdermale.jpg">
+											</div>
+											<div class="media-body">
+												<div class="row">
+													<div class="col-sm-9">
+														<div class="form-group">
+															<textarea class="form-control" name="message" placeholder="Share something with the world!"></textarea>
+														</div>
+													</div>
+													<div class="col-xs-3">
+														<div class="form-group">
+															<button type="submit" class="btn btn-success post-message" name="sendMessage">Post it!</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</form>
+									<hr>
+									<?php echo $messages->showMessages(); ?>
 									<?php
 										} else {
 											echo $messages->showMessages();
@@ -137,17 +197,19 @@
 								<p>Log me in!</p>
 							</div>
 							<div class="panel-body">
-								<div class="form-group">
-									<label for="email" class="label-control">E-mail address:</label>
-									<input type="text" name="email" class="form-control" placeholder="E-mailaddress">
-								</div>
-								<div class="form-group">
-									<label for="password" class="label-control">Password:</label>
-									<input type="password" name="password" class="form-control" placeholder="Password">
-								</div>
-								<div class="form-group">
-									<button type="submit" class="btn btn-primary" name="login">Login</button>
-								</div>
+								<form class="form" method="POST">
+									<div class="form-group">
+										<label for="email" class="label-control">E-mail address:</label>
+										<input type="text" name="email" class="form-control" placeholder="E-mailaddress">
+									</div>
+									<div class="form-group">
+										<label for="password" class="label-control">Password:</label>
+										<input type="password" name="password" class="form-control" placeholder="Password">
+									</div>
+									<div class="form-group">
+										<button type="submit" class="btn btn-primary" name="login">Login</button>
+									</div>
+								</form>
 							</div>
 						</div>
 					<?php
@@ -166,9 +228,30 @@
 										<i class="fa fa-users"></i>&nbsp;Users<span class="pull-right"><?php echo $user->countUsers(); ?>
 									</li>
 									<li class="list-group-item">
-										<i class="fa fa-bell"></i>&nbsp;Online Users<span class="pull-right"><?php echo $user->getOnlineUsers(); ?>
+										<i class="fa fa-bell"></i>&nbsp;Online Users<span class="pull-right"><?php echo $user->countOnlineUsers(); ?>
+									</li>
+									<li class="list-group-item">
+										<i class="fa fa-minus-circle"></i>&nbsp;Offline Users<span class="pull-right"><?php echo $user->countOfflineUsers(); ?>
 									</li>
 								</ul>
+							</div>
+						</div>
+						<div class="panel panel-default search-panel default-panel">
+							<div class="panel-body">
+								<input type="text" name="search" class="form-control" placeholder="Search the Guestbook">
+							</div>
+						</div>
+
+						<div class="ad">
+							<img src="assets/images/ad.gif" class="ad-image">
+						</div>
+
+						<div class="panel panel-default online-friends default-panel">
+							<div class="panel-heading">
+								<p>Online Friends</p>
+							</div>
+							<div class="panel-body">
+								<i style="color: grey">You currently have no friends...</i>
 							</div>
 						</div>
 					</div>
@@ -180,6 +263,12 @@
 		<?php require 'requirements/footer.html'; ?>
 
 		<script type="text/javascript">
+			$('.fa-heart').on('click', function() {
+				$('.badge').hide();
+			});
+		</script>
+
+		<script type="text/javascript">
 			function Blink(selector) {
 				$(selector).fadeOut('slow', function() {
 					$(this).fadeIn('slow', function() {
@@ -189,6 +278,13 @@
 			}
 
 			Blink('.fa-bell');
+			Blink('.online-icon');
+		</script>
+
+		<script>
+			$('.remover').on('click', function() {
+				$(this).parent().hide(500);
+			});
 		</script>
 	</body>
 </html>

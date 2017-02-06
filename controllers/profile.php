@@ -11,11 +11,18 @@ class ProfileController extends Controller {
 
 		$user->checkSession();
 
+		$this->load->Model('Messages');
+
+		$messages = new Messages();
+
+		$messages->deleteMessage(); 
+
 		$data['title'] = 'My Profile - Gastenboek';
 		$data['user'] = $user;
 		$data['error'] = $user->error;
 		$data['success'] = $user->success;
 		$data['warning'] = $user->warning;
+		$data['messages'] = $messages;
 
 		$this->load->View('profile', $data);
 	}

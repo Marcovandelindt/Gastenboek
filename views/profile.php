@@ -1,48 +1,63 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en">	
 	<head>
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta name="author" content="Marco van de Lindt">
+		<mata name="author" content="Marco van de Lindt">
 		<meta name="description" content="Gastenboek">
-		<title><?php echo $title; ?></title>
+		<title><?php echo $title;?></title>
 
 		<?php require 'requirements/header.html'; ?>
 	</head>
 	<body>
-		<nav class="navbar navbar-default navbar-static-top">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<a class="navbar-brand" href="home">Guestbook</a>
-					<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav" aria-expanded="false">
-						<span class="sr-only">Toggle Navigation</span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-						<span class="icon-bar"></span>
-					</button>
+		<div class="container">
+			<nav class="navbar navbar-default navbar-static-top top-nav">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="home">Guestbook</a>
+						<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav" aria-expanded="false">
+							<span class="sr-only">Toggle Navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+
+					<?php
+						if (isset($_SESSION['user'])) {
+					?>
+					<div class="collapse navbar-collapse" id="nav">
+						<ul class="nav navbar-nav navbar-right">
+							<li><a href="home">Homepage</a></li>
+							<li><a href="">My Friends</a></li>
+							<li class="active"><a href="profile">My Profile</a></li>
+							<li><a href="logout">Logout</a></li>
+						</ul>
+					</div>
+					<?php 
+						} else {
+					?>
+					<div class="collapse navbar-collapse" id="nav">
+						<ul class="nav navbar-nav navbar-right">
+							<li class="active"><a href="home">Homepage</a></li>
+							<li><a href="login">Login</a></li>
+							<li><a href="register">Register</a></li>
+						</ul>
+					</div>
+					<?php
+						}
+					?>
 				</div>
+			</nav>
 
-				<div class="collapse navbar-collapse" id="nav">
-					<ul class="nav navbar-nav navbar-right">
-						<li><a href="home"><i class="fa fa-home"></i>&nbsp;Homepage</a></li>
-						<li class="active"><a href="profile"><i class="fa fa-user-circle"></i>&nbsp;Profile</a></li>
-						<li><a href="logout"><i class="fa fa-user"></i>&nbsp;Logout</a></li>
-					</ul>
-				</div>		
-			</div>
-		</nav>
-
-		<?php
-			if (!isset($_GET['details'])) {
-		?>
-		<div class="section">
-			<div class="container-fluid">
+			<div class="section">
 				<div class="row">
-					<div class="col-md-4">
+					<!-- Left side of the page -->
+					<div class="col-md-3">
 						<div class="profile">
 							<div class="thumbnail">
-								<img src="assets/images/generalplaceholder.png" class="profile-image">
+								<img src="assets/images/placeholdermale.jpg">
 								<div class="caption">
 									<ul class="list-group">
 										<li class="list-group-item active">Personal Information</li>
@@ -52,57 +67,57 @@
 							</div>
 						</div>
 					</div>
-					<div class="col-md-8">
-
-					</div>
-				</div>
-			</div>
-		</div>
-		<?php
-			} else {
-		?>
-		<div class="section">
-			<div class="container-fluid">
-				<?php echo $user->getWelcomeMessage(); ?>
-				<div class="col-md-4 col-md-offset-4">
-					<div class="panel panel-default info-panel">
-						<div class="panel-body">
-							<div class="form-heading">Tell us a bit about yourself!</div>
-							<form class="form" method="POST">
-								<div class="form-group add-padding">
-									<label for="firstname" class="label-control">First name:</label>
-									<input type="text" name="firstname" class="form-control" placeholder="What is your firstname?">
-								</div>
-								<div class="form-group">
-									<label for="lastname" class="label-control">Last name:</label>
-									<input type="text" name="lastname" class="form-control" placeholder="What is your last name?">
-								</div>
-								<div class="form-group">
-									<label for="birth_date" class="label-control">Date fo birth:</label>
-									<input type="text" name="birth_date" class="form-control" placeholder="When were you born?">
-								</div>
-								<div class="form-group">
-									<label for="country" class="label-control">Where are you from:</label>
-									<input type="text" name="country" class="form-control" placeholder="For example: England, Netherlands">
-								</div>
-								<div class="form-group">
-									<label for="nickname" class="label-control">Nickname:</label>
-									<input type="text" name="nickname" class="form-control" placeholder="Do you have a nickname?">
-								</div>
-								<div class="form-group">
-									<button type="submit" class="btn btn-success" name="send">Send it!</button>
-									<button type="reset" class="btn btn-warning" name="reset">Reset!</button>
-								</div>
-							</form>
+					<!-- End of the left side of the page -->
+					<div class="col-md-6">
+						<div class="panel panel-default my-messages default-panel">
+							<div class="panel-heading">
+								<p>All messages by @<?php echo $_SESSION['user']['username']; ?></p>
+							</div>
+							<div class="panel-body">
+								<?php echo $user->getUsersMessages(); ?>
+							</div>
 						</div>
 					</div>
+					<!-- Middle of the page -->
+					<div class="col-md-3">
+						<div class="panel panel-default friends-panel default-panel">
+							<div class="panel-heading">
+								<p>All my friends</p>
+							</div>
+							<div class="panel-body">
+								<p><i>You don't have any friends just yet...</i></p>
+							</div>
+						</div>
+						<div class="panel panel-default default-panel statistics">
+							<div class="panel-heading">
+								<p>Statistics</p>
+							</div>
+							<div class="panel-body">
+								<ul class="list-group">
+									<li class="list-group-item">
+										<i class="fa fa-pencil"></i>&nbsp;Messages<span class="pull-right"><?php echo $messages->countMessages(); ?>
+									</li>
+									<li class="list-group-item">
+										<i class="fa fa-users"></i>&nbsp;Users<span class="pull-right"><?php echo $user->countUsers(); ?>
+									</li>
+									<li class="list-group-item">
+										<i class="fa fa-bell"></i>&nbsp;Online Users<span class="pull-right"><?php echo $user->countOnlineUsers(); ?>
+									</li>
+									<li class="list-group-item">
+										<i class="fa fa-minus-circle"></i>&nbsp;Offline Users<span class="pull-right"><?php echo $user->countOfflineUsers(); ?>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- End of the middle of the page -->
+
+					<!-- Right side of the page -->
+
+					<!-- End of the right side of the page -->
 				</div>
 			</div>
 		</div>
-		<?php
-			}
-		?>
-
 		<?php require 'requirements/footer.html'; ?>
 	</body>
 </html>

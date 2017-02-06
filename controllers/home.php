@@ -9,9 +9,12 @@ class HomeController extends Controller {
 		$messages = new Messages();
 
 		$messages->validateMessage();
+		$messages->deleteMessage(); 
 
 		$this->load->Model('User');
 		$user = new User();
+
+		$user->loginUser();
 
 		$data['title'] = 'Home - Gastenboek';
 		$data['messages']  = $messages;

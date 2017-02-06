@@ -37,7 +37,7 @@ class User extends Model
 				return $this->error = 'Your e-mailaddress cannot contain any JavaScript!';
 			}
 
-			if (!filter_var($this->request->get('email'), FILTER_VLIDATE_EMAIL))
+			if (!filter_var($this->request->get('email'), FILTER_VALIDATE_EMAIL))
 			{
 				return $this->error = 'Please insert a correct e-mailaddress!';
 			}
@@ -105,7 +105,7 @@ class User extends Model
 
 				if ($insert)
 				{
-					return $this->success = 'User has successfully benn created. You can now login!';
+					return $this->success = 'User has successfully been created. You can now login!';
 				}
 				else
 				{
@@ -199,14 +199,7 @@ class User extends Model
 					$update->execute();
 
 					// Check if the user logs in for the first time
-					if ($_SESSION['user']['logins'] == 0)
-					{
-						header('Location: profile&details'); 
-					}
-					else
-					{
-						header('Location: profile');
-					}
+					header('Location: profile');
 				}
 				else
 				{
@@ -248,51 +241,88 @@ class User extends Model
 
 	public function getUserInformation()
 	{
-		$get = $this->connect->database->prepare('SELECT * FROM users WHERE id = ' . $_SESSION['user']['id'] . '');
-		$get->execute();
+		$get = $this->connect->database->prepare('SELECT * FROM users WHERE id = :id');
 
-		$item = $get->fetch(PDO::FETCH_ASSOC);
+		$get->setFetchMode(PDO::FETCH_CLASS, 'User');
 
-		// Check if the username exists
-		if (!empty($item['username']))
-		{
-			echo '<li class="list-group-item"><strong>Username: </strong>' . $item['username'] . '</li>';
+		$get->execute([
+			'id' => $_SESSION['user']['id']
+		]);
+
+		$oUser = $get->fetch(PDO::FETCH_CLASS);
+
+		if (!empty($oUser->username)) {
+			echo '<li class="list-group-item"><strong>Username:</strong><span class="pull-right">@' . $oUser->username . '</span</li>';
 		}
 
-		// Chech if the first name exists
-		if (!empty($item['first_name']))
-		{
-			echo '<li class="list-group-item"><strong>Firstname: </strong>' . $item['first_name'] . '</li>';
+		if (!empty($oUser->first_name)) {
+			echo '<li class="list-group-item"><strong>First name:</strong><span class="pull-right">' . $oUser->first_name . '</span></li>';
 		}
 
-		// Check if the last name exists
-		if (!empty($item['last_name']))
-		{
-			echo '<li class="list-group-item"><strong>Lastname: </strong>' . $item['last_name'] . '</li>';
+		if (!empty($oUser->last_name)) {
+			echo '<li class="list-group-item"><strong>Last name:</strong><span class="pull-right">' . $oUser->last_name . '</span></li>';
 		}
 
-		// Check if the nickname exists
-		if (!empty($item['nickname']))
-		{
-			echo '<li class="list-group-item"><strong>Nickname: </strong>' . $item['nickname'] . '</li>';
+		if (!empty($oUser->birth_date)) {
+			echo '<li class="list-group-item"><strong>Date of Birth:</strong><span class="pull-right">' . $oUser->birth_date . '</span></li>';
 		}
 
-		// Check if the Date of birth exists
-		if (!empty('birth_date'))
-		{
-			echo '<li class="list-group-item"><strong>Date of Birth: </strong>' . $item['birth_date'] . '</li>';
+		if (!empty($oUser->country)) {
+			echo '<li class="list-group-item"><strong>Country:</strong><span class="pull-right">' . $oUser->country . '</span></li>';
 		}
 
-		// Check if the Bio exists
-		if (!empty($item['bio']))
-		{
-			echo '<li class="list-group-item"><strong>Bio: </strong>' . $item['bio'] . '</li>';
+		if (!empty($oUser->bio)) {
+			echo '<li class="list-group-item"><strong>Bio:</strong>&nbsp;' . $oUser->bio . '</li>';
 		}
 
-		// Check all the logins
-		if (!empty($item['logins']))
-		{
-			echo '<li class="list-group-item"><strong>Logins: </strong>' . $item['logins'] . '</li>';
+		if ($oUser->status == "Online") {
+			echo '
+			<li class="list-group-item">
+				<strong>Status:</strong>
+				<span class="pull-right"><i class="fa fa-circle-thin online-icon"></i>&nbsp;' . $oUser->status . '</span>
+			</li>
+			';	
+		}
+
+		if ($oUser->status == "Offline") {
+			echo '
+			<li class="list-group-item">
+				<strong>Status:</strong>
+				<span class="pull-right"><i class="fa fa-circle-thin offline-icon"></i>&nbsp;' . $oUser->status . '</span>
+			</li>
+			';
+		}
+	}
+
+	// Hidden input meegeven
+
+	public function getUsersMessages() {
+		$get = $this->connect->database->prepare('SELECT * FROM messages WHERE username = :username');
+		$get->execute([
+			'username' => $_SESSION['user']['username']
+		]);
+
+		foreach ($get as $item) {
+			echo '
+				<form class="form" method="POST">
+				<div class="user-message">
+					<div class="media">
+						<div class="media-left">
+							<img src="assets/images/' . $item['image'] . '">
+						</div>
+						<div class="media-body">
+							<p class="message-username">' . $item['username'] . '</p>
+							<p class="message-text">' . $item['message'] . '</p>
+							<p class="date">' . $item['date'] . '</p>
+								<div class="form-group">
+									<button type="submit" class="btn btn-danger" id="' . $item['id'] . '" name="delete">Delete</button>
+								</div>
+						</div>
+					</div>
+				</div>
+				</form>
+				<hr>
+			';
 		}
 	}
 
@@ -314,7 +344,7 @@ class User extends Model
 		}
 	}
 
-	public function getOnlineUsers()
+	public function countOnlineUsers()
 	{
 		$get = $this->connect->database->prepare('SELECT * FROM users WHERE status = "Online" LIMIT 5');
 		$get->execute();
@@ -328,6 +358,23 @@ class User extends Model
 		else
 		{
 			echo $count;
+		}
+	}
+
+	public function getOnlineUsers()
+	{
+		$get = $this->connect->database->prepare('SELECT username, last_online FROM users WHERE status = "Online"');
+		$get->execute();
+
+		$count = $get->rowCount(); 
+
+		if ($count == 0) {
+			echo '<i style="color: grey">Whoops, looks like no one is online...</i>';
+		} else {
+
+			foreach ($get as $item) {
+			echo '<li class="list-group-item"><i class="fa fa-circle-thin online-icon"></i>&nbsp;' . $item['username'] . '&nbsp;(<i>' . date('H:i', strtotime($item['last_online'])) . '</i>)</li>';
+			}
 		}
 	}
 
@@ -346,9 +393,19 @@ class User extends Model
 		{
 			foreach ($get as $item)
 			{
-				echo '<li><strong>' . $item['username'] . '</strong><span class="label label-danger pull-right">Offline!</span></li>';
+				echo '<li class="list-group-item"><i class="fa fa-circle-thin offline-icon"></i>&nbsp;' . $item['username'] . '&nbsp;(<i>' . date('d-m-Y H:i', strtotime($item['last_online'])) . '</i>)</li>';
 			}
 		}
+	}
+
+	public function countOfflineUsers()
+	{
+		$count = $this->connect->database->prepare('SELECT * FROM users WHERE status = "Offline"');
+		$count->execute();
+
+		$row = $count->rowCount();
+
+		echo $row;
 	}
 
 	public function getAllUsers() {
@@ -358,7 +415,7 @@ class User extends Model
 		foreach ($get as $item) {
 			echo '
 				<li class="list-group-item">
-					<p>' . $item['username'] . '</p>
+					<p>' . $item['username'] . '&nbsp;(<i style="color: grey">@' . $item['username'] . '</i>)</p>
 					<span class="label label-success">' . date('d-m-Y H:i', strtotime($item['joined_date'])) . '</span>
 				</li>
 			';
@@ -372,6 +429,11 @@ class User extends Model
 		$rows = $count->rowCount();
 
 		echo $rows;
+	}
+
+	// Make later 
+	public function getOnlineFriends() {
+		$get = $this->connect->database->prepare();
 	}
 }
 

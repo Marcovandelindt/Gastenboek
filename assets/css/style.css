@@ -101,6 +101,25 @@ body {
 	font-size: 14px;
 }
 
+.online-users .list-group-item,
+.offline-users .list-group-item {
+	margin-left: -15px !important;
+	margin-right: -15px !important;
+	border: none !important;
+}
+
+.online-icon {
+	background-color: #1BBD3F !important;
+	border-radius: 50px;
+	color: #1BBD3F !important;
+}
+
+.offline-icon {
+	background-color: #CD2424 !important;
+	border-radius: 50px;
+	color: #CD2424 !important;
+}
+
 /* | Middle | */
 .carousel-inner,
 .carousel-img {
@@ -109,7 +128,10 @@ body {
 	border-radius: 10px;
 }
 
-/* | Right  | */
+.message-wrapper {
+	border-bottom: 1px solid #E7E7E7;
+}
+
 .messages .panel-heading {
 	background-color: #F9F9F9 !important;
 	box-shadow: none !important;
@@ -117,6 +139,24 @@ body {
 	border-top-right-radius: 10px;
 }
 
+.messages .media img {
+	height: 64px !important;
+	width: 64px !important;
+}
+
+.messages textarea {
+	height: 64px !important;
+}
+
+.messages .post-message {
+	margin-top: 15px;
+}
+
+.interaction {
+	display: none;
+}
+
+/* | Right  | */
 .statistics .list-group-item {
 	background-color: #DB4AC8 !important;
 	border: none !important;
@@ -124,4 +164,39 @@ body {
 	font-weight: bold;
 	font-size: 18px;
 	margin-top: 15px;
+}
+
+.ad-image {
+	height: 200px;
+	width: 100%;
+}
+
+.online-friends {
+	margin-top: 15px;
+}
+
+/* | Profile | */
+.profile .thumbnail {
+	background-color: #f0f0ed !important;
+	border: none !important;
+}
+
+.profile .list-group-item {
+	margin-left: -13px !important;
+	margin-right: -13px !important;
+	border-radius: 0px !important;
+}
+
+.profile .list-group-item .first {
+	border-top: 1px solid #ccc;
+}
+
+.user-message .media img {
+	height: 64px;
+	width: 64px;
+}
+
+.user-message .message-username {
+	font-weight: bold !important;
+	font-size: 15px;
 }

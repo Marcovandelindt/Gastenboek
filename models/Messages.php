@@ -10,59 +10,38 @@ class Messages extends Model
 		parent::__construct();
 	}
 
-	public function validateMessage()
-	{
-		if (isset($_POST['sendMessage']))
-		{
-			if (empty($this->request->get('name')))
-			{
-				return $this->error = 'You did not choose a name yet!';
-			}
+	public function validateMessage() {
 
-			if (empty($this->request->get('image')))
-			{
-				return $this->error = 'You did not choose an image yet!';
-			}
+		if (isset($_POST['sendMessage'])) {
+			if (empty($this->request->get('message'))) {
+				return $this->error = 'You did not fill in a message!';
+			} else {
 
-			if (empty($this->request->get('message')))
-			{
-				return $this->error = 'You did not write your message yet!';
-			} 
-			else
-			{
-				$insert = $this->connect->database->prepare('INSERT INTO messages (name, image, message) VALUES (:name, :image, :message)');
+				// Insert into database
+				$insert = $this->connect->database->prepare('INSERT INTO messages (username, image, message) VALUES (:username, :image, :message)');
 				$insert->execute([
-					'name' => $this->request->get('name'),
-					'image' => $this->request->get('image'),
-					'message' => $this->request->get('message')
+					':username' => $_SESSION['user']['username'],
+					':message' => $this->request->get('message'),
+					':image' => 'placeholdermale.jpg'
 				]);
-
-				if ($insert)
-				{
-					return $this->success = 'Dear ' . $this->request->get('name') . '. Thanx for your message!';
-				}
-				else
-				{
-					return $this->error = 'Something went wrong while posting your message. Please try again later!';
-				}
 			}
 		}
 	}
 
 	public function showMessages()
 	{
-		$get = $this->connect->database->prepare('SELECT * FROM messages ORDER BY date DESC');
+		$get = $this->connect->database->prepare('SELECT * FROM messages  ORDER BY date DESC');
 		$get->execute();
 
 		foreach ($get as $item)
 		{
 			echo '
-				<div class="media">
+				<div class="media message-wrapper message' . $item['id'] . '">
 					<div class="media-left">
 						<img class="media-object" src="assets/images/' . $item['image'] . '">
 					</div>
 					<div class="media-body">
-						<p class="name">' . $item['name'] . '</p>
+						<p class="name">' . $item['username'] . '</p>
 						<p class="message">' . $item['message'] . '</p>
 						<p class="date"><i>' . $item['date'] . '</i></p>
 					</div>
@@ -73,7 +52,7 @@ class Messages extends Model
 
 	public function showRecentMessages()
 	{
-		$get = $this->connect->database->prepare('SELECT name, image, date FROM messages ORDER BY date DESC');
+		$get = $this->connect->database->prepare('SELECT username, image, date FROM messages ORDER BY date DESC');
 		$get->execute();
 
 		foreach ($get as $item)
@@ -84,7 +63,7 @@ class Messages extends Model
 						<img class="media-object" src="assets/images/' . $item['image'] . '">
 					</div>
 					<div class="media-body">
-						<p class="name">' . $item['name'] . '</p>
+						<p class="name">' . $item['username'] . '</p>
 						<p class="date"><i>' . $item['date'] . '</i></p>
 					</div>
 				</div>
@@ -99,6 +78,39 @@ class Messages extends Model
 		$rows = $count->rowCount();
 
 		echo $rows;
+	}
+
+	public function likeMessage() {
+		if (isset($_POST['like'])) {
+			$update = $this->connect->database->prepare('UPDATE messages SET likes = likes+1');
+			$update->execute();
+		}
+	}
+
+	public function showReplies() {
+		$get = $this->connect->database->prepare('SELECT * FROM comments WHERE id = :id');
+		$get->execute([
+			'id' => $this->request->get('id')
+		]);
+
+		foreach ($get as $item) {
+			echo $item['message'];
+		}
+	}
+
+	
+	public function deleteMessage() {
+		
+		if (isset($_POST['delete'])) {
+			$select = $this->connect->database->prepare('SELECT * FROM messages WHERE id = :id');
+			$select->execute([
+				'id' => $this->request->get('id')
+			]);
+
+			$result = $select->fetch(PDO::FETCH_ASSOC);
+
+			echo $result['id'];
+		}
 	}
 }
 
