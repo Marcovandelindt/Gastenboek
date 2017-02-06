@@ -1,100 +1,93 @@
 <?php
 
-class User extends Model
-{
+class User extends Model {
+
 	public $error 	= NULL;
 	public $success = NULL;
-	public $warning = NULL;
+	public $scripts = "#<script(.*?)>(.*?)</script>#is";
 
-	public function __construct()
-	{
+	public function __construct() {
 		parent::__construct();
 	}
 
-	public function registerUser()
-	{
-		if (isset($_POST['register']))
-		{
-			// Validate the username input field
-			if (empty($this->request->get('username')))
-			{
-				return $this->error = 'Your username cannot be empty!';
+	public function registerUser() {
+
+		$scripts = "#<script(.*?)>(.*?)</script>#is";
+
+		if (isset($_POST['register'])) {
+
+			// Validate the Username input-field
+			if (empty($this->request->get('username'))) {
+				return $this->error = 'You have not chosen a username yet!';
 			}
 
-			if (preg_match("#<script(.*?)>(.*?)</script>#is", $this->request->get('username')))
-			{
-				return $this->error = 'Your username cannot contain any JavaScript!';
+			if (preg_match($scripts, $this->request->get('username'))) {
+				return $this->error = 'You are not allowed to use JavaScript in your username!';
 			}
 
-			// Validate the e-mailaddress input field
-			if (empty($this->request->get('email')))
-			{
-				return $this->error = 'Your e-mailaddress cannot be empty!';
+			// Validate the E-mailaddress input field
+			if (empty($this->request->get('email'))) {
+				return $this->error = 'You have not chosen a e-mailaddress yet!';
 			}
 
-			if (preg_match("#<script(.*?)>(.*?)</script>#is", $this->request->get('email')))
-			{
-				return $this->error = 'Your e-mailaddress cannot contain any JavaScript!';
+			if (!filter_var($this->request->get('email'), FILTER_VALIDATE_EMAIL)) {
+				return $this->error = 'Please choose a correct e-mailaddress!';
 			}
 
-			if (!filter_var($this->request->get('email'), FILTER_VALIDATE_EMAIL))
-			{
-				return $this->error = 'Please insert a correct e-mailaddress!';
+			if (preg_match($scripts, $this->request->get('email'))) {
+				return $this->error = 'You are not allowed to use JavaScript in your e-mailaddress';
 			}
 
-			// Validate the password input field
-			if (empty($this->request->get('password')))
-			{
-				return $this->error = 'Your password cannot be empty!';
+			// Validate the Password input-field
+			if (empty($this->request->get('password'))) {
+				return $this->error = 'You have not chosen your password yet!';
 			}
 
-			if (preg_match("#<script(.*?)>(.*?)</script>#is", $this->request->get('password'))) {
-				return $this->error = 'Your password cannot contain any JavaScript';
+			if (preg_match($scripts, $this->request->get('password'))) {
+				return $this->error = 'You are not allowed to use JavaScript in your password!';
 			}
 
-			// Validate the password_confirm input field
-			if (empty($this->request->get('password_confirm')))
-			{
+			// Validate the password_confirm input-field
+			if (empty($this->request->get('password_confirm'))) {
 				return $this->error = 'Please confirm your password!';
 			}
 
-			// Check if the password and confirmed password are both the same
-			if ($this->request->get('password') != $this->request->get('password_confirm'))
-			{
-				return $this->error = 'Both the passwords do not match!';
+			// Check if both passwords are the same
+			if ($this->request->get('password') != $this->request->get('password_confirm')) {
+				return $this->error = 'Both passwords do not match!';
 			}
 
-			// Check if user is already in the database
+			// Check if the username already exists in the database
 			$checkuser = $this->connect->database->prepare('SELECT username FROM users WHERE username = :username');
+
 			$checkuser->execute([
 				'username' => $this->request->get('username')
 			]);
 
-			if ($checkuser->rowCount() > 0)
-			{
+			if ($checkuser->rowCount() > 0) {
 				return $this->error = 'This username already exists!';
 			}
 
-			// Check if email already exists in the database
+			// Check if e-mailaddress exists in Database
 			$checkemail = $this->connect->database->prepare('SELECT email FROM users WHERE email = :email');
+
 			$checkemail->execute([
 				'email' => $this->request->get('email')
 			]);
 
 			if ($checkemail->rowCount() > 0) {
 				return $this->error = 'This e-mailaddress already exists!';
-			} else
-			{
-				// Insert the data in the database
-				$salt 		= dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
+			} else {
 
+				// Generate a password
+				$salt 		= dechex(mt_rand(0, 2147483647)) . dechex(mt_rand(0, 2147483647));
 				$password 	= hash('sha256', $this->request->get('password') . $salt);
 
-				for ($round = 0; $round < 65536; $round++)
-				{
+				for ($round = 0; $round < 65536; $round++) {
 					$password = hash('sha256', $this->request->get('password') . $salt);
 				}
 
+				// Insert into the Database
 				$insert = $this->connect->database->prepare('INSERT INTO users (username, email, password, salt) VALUES (:username, :email, :password, :salt)');
 				$insert->execute([
 					'username' 	=> $this->request->get('username'),
@@ -103,144 +96,104 @@ class User extends Model
 					'salt' 		=> $salt
 				]);
 
-				if ($insert)
-				{
-					return $this->success = 'User has successfully been created. You can now login!';
-				}
-				else
-				{
-					return $this->error = 'Something went wrong while registering. Please try again later!';
+				if ($insert) {
+					return $this->success = 'You have successfully been registered. You can login now!';
+				} else {
+					return $this->error = 'Something went wrong. Please try again later.';
 				}
 			}
 		}
 	}
 
-	public function loginUser()
-	{
-		if (isset($_POST['login']))
-		{
-			// Validate the email
-			if (empty($this->request->get('email')))
-			{
-				return $this->error = 'Your e-mailaddress cannot be empty!';
+	public function loginUser() {
+		
+		$scripts = "#<script(.*?)>(.*?)</script>#is";
+
+		if (isset($_POST['login'])) {
+			// Validate the E-mailaddress
+			if (empty($this->request->get('email'))) {
+				return $this->error = 'Please fill in your e-mailaddress!';
 			}
 
-			if (preg_match("#<script(.*?)>(.*?)</script>#is", $this->request->get('email')))
-			{
-				return $this->error = 'Your e-mailaddress cannot contain any JavaScript!';
+			if (preg_match($scripts, $this->request->get('email'))) {
+				return $this->error = 'You are not allowed to use JavaScript in your e-mailaddress!';
 			}
 
-			// Validating the password
-			if (empty($this->request->get('password')))
-			{
-				return $this->error = 'Your password cannot be empty!';
+			// Validate the Password
+			if (empty($this->request->get('password'))) {
+				return $this->error = 'Please fill in your password!';
 			}
 
-			if (preg_match("#<script(.*?)>(.*?)</script>#is", $this->request->get('password')))
-			{
-				return $this->error = 'Your password cannot contain any JavaScript!';
-			}
-			else
-			{
-				// Check the data
+			if (preg_match($scripts, $this->request->get('passwowrd'))) {
+				return $this->error = 'You are not allowed to use JavaScript in your password!';
+			} else {
+
+				// Decode the password
 				$select = $this->connect->database->prepare('SELECT * FROM users WHERE email = :email');
 				$select->execute([
 					'email' => $this->request->get('email')
-				]);
+				]);	
 
 				$loggedin = FALSE;
 
 				$row = $select->fetch(PDO::FETCH_ASSOC);
 
-				if ($row)
-				{
+				if ($row) {
 					$check_password = hash('sha256', $this->request->get('password') . $row['salt']);
 
-					for ($round = 0; $round < 65536; $round++)
-					{
+					for ($rount = 0; $round < 65536; $round++) {
 						$check_password = hash('sha256', $this->request->get('password') . $row['salt']);
 					}
 
-					if ($check_password === $row['password'])
-					{
+					if ($check_password === $row['password']) {
 						$loggedin = TRUE;
-					}
-					else
-					{
-						return $this->error = 'The password and emal combination did not match. Please try again!';
+					} else {
+						return $this->error = 'The password and e-mail did not match. Please try again!';
 					}
 				}
 
-				if ($loggedin)
-				{
+				if ($loggedin) {
+					
 					// Update the login count
-					$update = $this->connect->database->prepare('UPDATE users SET logins = logins+1 WHERE email = :email');
+					$update = $this->connect->database->prepare('UPDATE users SET ip_address = :ip_address, user_agent = :user_agent');
 					$update->execute([
-						'email' => $this->request->get('email')
-					]);
-
-					// Retrieve the IP Address and User Agent
-					$insert = $this->connect->database->prepare('UPDATE users SET ip_address = :ip_address, user_agent = :user_agent');
-					$insert->execute([
 						'ip_address' => $_SERVER['REMOTE_ADDR'],
 						'user_agent' => $_SERVER['HTTP_USER_AGENT']
 					]);
 
-					// Unset the password and the salt before the session
+					// Unset password and salt before creating a Session
 					unset($row['password']);
 					unset($row['salt']);
 
-					// Set the session name and the session
+					// Create the Session
 					session_name('userdata');
 					$_SESSION['user'] = $row;
 
-					// Update status to Online
-					$update = $this->connect->database->prepare('UPDATE users SET status = "Online" WHERE id = ' . $_SESSION['user']['id'] . '');
-					$update->execute();
+					// Set status to online
+					$update = $this->connect->database->prepare('UPDATE users SET status = "Online" WHERE id = :id');
+					$update->execute([
+						'id' => $_SESSION['user']['id']
+					]);
 
-					// Check if the user logs in for the first time
 					header('Location: profile');
-				}
-				else
-				{
+				} else {
 					return $this->error = 'You could not be logged in. Please try again later!';
 				}
 			}
 		}
 	}
 
-	public function isLoggedIn()
-	{
-		if (isset($_SESSION['user']) && $_SESSION['user'] == TRUE)
-		{
-			if ($_SESSION['user']['logins'] == 0)
-			{
-				header('Location: profile&details');
-			}
-			else
-			{
-				header('Location: profile');
-			}
-		}
-		else
-		{
+	public function isLoggedIn() {
+		
+		if (isset($_SESSION['user']) && $_SESSION['user'] == TRUE) {
+			header('Location: profile');
+		} else {
 			header('Location: login');
 		}
 	}
 
-	public function getWelcomeMessage()
-	{
-		echo'
-			<div class="alert alert-info">
-				<p>Dear ' . $_SESSION['user']['username'] . ',<p>
-				<p>It looks like this is your first time on the Guestbook. We are very happy that you signed up for us!</p>
-				<p>We really try to get to know our members better, so we would like to know a litlle bit more about you. Before you continue, can you please tell us something about yourself below?</p>
-			</div>
-		';
-	}
+	public function getUserInformation() {
 
-	public function getUserInformation()
-	{
 		$get = $this->connect->database->prepare('SELECT * FROM users WHERE id = :id');
 
 		$get->setFetchMode(PDO::FETCH_CLASS, 'User');
@@ -251,30 +204,49 @@ class User extends Model
 
 		$oUser = $get->fetch(PDO::FETCH_CLASS);
 
+		// Check if the user has a username or not
 		if (!empty($oUser->username)) {
 			echo '<li class="list-group-item"><strong>Username:</strong><span class="pull-right">@' . $oUser->username . '</span</li>';
 		}
 
+		// Check if the user has a first name or not
 		if (!empty($oUser->first_name)) {
 			echo '<li class="list-group-item"><strong>First name:</strong><span class="pull-right">' . $oUser->first_name . '</span></li>';
+		} else {
+			echo '<li class="list-group-item"><i style="color: grey">' . $oUser->username . '\'s first name is private or not filled in yet...</i>';
 		}
 
+		// Check if the user has a last name or not
 		if (!empty($oUser->last_name)) {
 			echo '<li class="list-group-item"><strong>Last name:</strong><span class="pull-right">' . $oUser->last_name . '</span></li>';
+		} else {
+			echo '<li class="list-group-item"><i style="color: grey">' . $oUser->username . '\'s last name is private or not filled in yet...</i>';
 		}
 
+		// Check if the user has a birth date or not
 		if (!empty($oUser->birth_date)) {
 			echo '<li class="list-group-item"><strong>Date of Birth:</strong><span class="pull-right">' . $oUser->birth_date . '</span></li>';
+		} else {
+			echo '<li class="list-group-item"><i style="color: grey">' . $oUser->username . '\'s date of birth is private or not filled in yet...</i>';
+
 		}
 
+		// Check if the user has a country or not
 		if (!empty($oUser->country)) {
 			echo '<li class="list-group-item"><strong>Country:</strong><span class="pull-right">' . $oUser->country . '</span></li>';
+		} else {
+			echo '<li class="list-group-item"><i style="color: grey">' . $oUser->username . '\'s country is private or not filled in yet...</i>';
+
 		}
 
+		// Check if the user has a bio or not
 		if (!empty($oUser->bio)) {
 			echo '<li class="list-group-item"><strong>Bio:</strong>&nbsp;' . $oUser->bio . '</li>';
+		} else {
+			echo '<li class="list-group-item"><i style="color: grey">' . $oUser->username . '\'s bio is private or not filled in yet...</i>';
 		}
 
+		// Check if the user is online or offline
 		if ($oUser->status == "Online") {
 			echo '
 			<li class="list-group-item">
@@ -292,7 +264,7 @@ class User extends Model
 			</li>
 			';
 		}
-	}
+	}		
 
 	// Hidden input meegeven
 
