@@ -102,14 +102,10 @@ class Messages extends Model
 	public function deleteMessage() {
 		
 		if (isset($_POST['delete'])) {
-			$select = $this->connect->database->prepare('SELECT * FROM messages WHERE id = :id');
-			$select->execute([
-				'id' => $this->request->get('id')
+			$delete = $this->connect->database->prepare('DELETE FROM messages WHERE id = :id');
+			$delete->execute([
+				'id' => $this->request->get('hidden')
 			]);
-
-			$result = $select->fetch(PDO::FETCH_ASSOC);
-
-			echo $result['id'];
 		}
 	}
 }

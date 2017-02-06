@@ -315,7 +315,7 @@ class User extends Model
 							<p class="message-text">' . $item['message'] . '</p>
 							<p class="date">' . $item['date'] . '</p>
 								<div class="form-group">
-									<input type="hidden" name="' . $item['id'] . '">
+									<input type="hidden" name="hidden" value="' . $item['id'] . '">
 									<button type="submit" class="btn btn-danger" id="' . $item['id'] . '" name="delete">Delete</button>
 								</div>
 						</div>
