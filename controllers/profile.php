@@ -21,7 +21,6 @@ class ProfileController extends Controller {
 		$data['user'] = $user;
 		$data['error'] = $user->error;
 		$data['success'] = $user->success;
-		$data['warning'] = $user->warning;
 		$data['messages'] = $messages;
 
 		$this->load->View('profile', $data);
