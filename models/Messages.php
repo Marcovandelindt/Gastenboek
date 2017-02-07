@@ -41,7 +41,7 @@ class Messages extends Model
 						<img class="media-object" src="assets/images/' . $item['image'] . '">
 					</div>
 					<div class="media-body">
-						<p class="name">' . $item['username'] . '</p>
+						<a class="name" href="profile/' . $item['username'] . '">' . $item['username'] . '</a>
 						<p class="message">' . $item['message'] . '</p>
 						<p class="date"><i>' . $item['date'] . '</i></p>
 					</div>
@@ -106,6 +106,8 @@ class Messages extends Model
 			$delete->execute([
 				'id' => $this->request->get('hidden')
 			]);
+
+			return $this->success = 'You have successully deleted your message!';
 		}
 	}
 }
