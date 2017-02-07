@@ -15,6 +15,7 @@ class HomeController extends Controller {
 		$user = new User();
 
 		$user->loginUser();
+		$user->Search();
 
 		$data['title'] = 'Home - Gastenboek';
 		$data['messages']  = $messages;
