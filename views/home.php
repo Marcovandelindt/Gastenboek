@@ -127,7 +127,15 @@
 							</div>
 
 							<div class="top-wrapper" style="margin-top: 15px;">
-								<div class="panel panel-default messages">
+								<div class="panel panel-default search-container hidden" id="search-container">
+									<div class="panel-heading">
+										<p>Searchbox</p>
+									</div>
+									<div class="panel-body" id="search-container">
+										
+									</div>
+								</div>
+								<div class="panel panel-default messages collapse in" id="messages">
 									<div class="panel-heading">
 										<p>Recent Messages</p>
 									</div>
@@ -238,7 +246,16 @@
 						</div>
 						<div class="panel panel-default search-panel default-panel">
 							<div class="panel-body">
-								<input type="text" name="search" class="form-control" placeholder="Search the Guestbook">
+								<div class="row">
+									<form class="form" method="POST">
+										<div class="col-xs-8">
+											<input type="text" name="search-value" class="form-control" placeholder="Search the Guestbook">
+										</div>
+										<div class="col-xs-3">
+											<button id="search" class="btn btn-primary" type="submit" name="search">Search</button>
+										</div>
+									</form>
+								</div>
 							</div>
 						</div>
 
@@ -286,5 +303,13 @@
 				$(this).parent().hide(500);
 			});
 		</script>
+
+		<script>
+			$('#search').click( function() {
+				$('#messages').css('display', 'none');
+				$('#search-container').css('display', 'block');
+			});
+		</script>
+		
 	</body>
 </html>
