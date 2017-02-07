@@ -29,7 +29,7 @@ class Router {
 
 		if (!file_exists(BASE_PATH . '/controllers/' . $class . '.php')
 		&& !empty($class)) {
-			require BASE_PATH . '/errors/controller.php';
+			require BASE_PATH . '/errors/404.php';
 		}
 	}
 }
