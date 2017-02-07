@@ -141,7 +141,7 @@ class User extends Model {
 				if ($row) {
 					$check_password = hash('sha256', $this->request->get('password') . $row['salt']);
 
-					for ($rount = 0; $round < 65536; $round++) {
+					for ($round = 0; $round < 65536; $round++) {
 						$check_password = hash('sha256', $this->request->get('password') . $row['salt']);
 					}
 
@@ -175,7 +175,7 @@ class User extends Model {
 						'id' => $_SESSION['user']['id']
 					]);
 
-					header('Location: profile');
+					header('Location: profile/' . $_SESSION['user']['username']);
 				} else {
 					return $this->error = 'You could not be logged in. Please try again later!';
 				}
@@ -269,7 +269,7 @@ class User extends Model {
 	// Hidden input meegeven
 
 	public function getUsersMessages() {
-		$get = $this->connect->database->prepare('SELECT * FROM messages WHERE username = :username');
+		$get = $this->connect->database->prepare('SELECT * FROM messages WHERE username = :username ORDER BY date DESC');
 		$get->execute([
 			'username' => $_SESSION['user']['username']
 		]);
@@ -277,22 +277,22 @@ class User extends Model {
 		foreach ($get as $item) {
 			echo '
 				<form class="form" method="POST">
-				<div class="user-message">
-					<div class="media">
-						<div class="media-left">
-							<img src="assets/images/' . $item['image'] . '">
-						</div>
-						<div class="media-body">
-							<p class="message-username">' . $item['username'] . '</p>
-							<p class="message-text">' . $item['message'] . '</p>
-							<p class="date">' . $item['date'] . '</p>
+					<div class="user-message">
+						<div class="media">
+							<div class="media-left">
+								<img src="assets/images/' . $item['image'] . '">
+							</div>
+							<div class="media-body">
+								<p class="message-username">' . $item['username'] . '</p>
+								<p class="message-text">' . $item['message'] . '</p>
+								<p class="date">' . $item['date'] . '</p>
 								<div class="form-group">
 									<input type="hidden" name="hidden" value="' . $item['id'] . '">
 									<button type="submit" class="btn btn-danger" id="' . $item['id'] . '" name="delete">Delete</button>
 								</div>
+							</div>
 						</div>
 					</div>
-				</div>
 				</form>
 				<hr>
 			';
@@ -404,9 +404,37 @@ class User extends Model {
 		echo $rows;
 	}
 
-	// Make later 
-	public function getOnlineFriends() {
-		$get = $this->connect->database->prepare();
+	public function Search() {
+
+		if (isset($_POST['search'])) {
+			
+			$search = $this->connect->database->prepare('SELECT * FROM users WHERE username LIKE :search OR first_name LIKE :search');
+			$search->execute([
+				'search' => $this->request->get('search-value')
+			]);
+
+			$item = $search->fetch(PDO::FETCH_ASSOC);
+
+			$data['username'] = $item['username'];
+
+			// header('Location: profile?user=' . $this->request->get('serach-value'));
+		}
+	}
+
+	public function loadProfile() {
+		
+		$get = $this->connect->database->prepare('SELECT * FROM users WHERE username = :username');
+		$get->execute([
+			'username' => $_GET['value']
+		]);
+
+		$result = $get->fetch(PDO::FETCH_ASSOC);
+
+		echo $result['username'];
+	}
+
+	public function getProfileDetails() {
+		$this->getProfile();
 	}
 }
 
