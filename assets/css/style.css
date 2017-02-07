@@ -39,6 +39,10 @@ body {
 	margin-top: 10px;
 }
 
+.default-panel .panel-body {
+	background-color: #fff;
+}
+
 .default-panel label {
 	color: grey;
 }
@@ -156,6 +160,16 @@ body {
 	display: none;
 }
 
+.searchUsers {
+	position: absolute;
+	margin-top: 5px !important;
+}
+
+.searchUsers:hover {
+	text-decoration: none;
+	cursor: pointer;
+}
+
 /* | Right  | */
 .statistics .list-group-item {
 	background-color: #DB4AC8 !important;
@@ -184,6 +198,10 @@ body {
 	padding-top: 15px;
 }
 
+.search-panel .search {
+	margin-left: -15px !important;
+}
+
 /* | Profile | */
 .profile .thumbnail {
 	background-color: #f0f0ed !important;
@@ -208,4 +226,8 @@ body {
 .user-message .message-username {
 	font-weight: bold !important;
 	font-size: 15px;
+}
+
+.remover:hover {
+	cursor: pointer;
 }
