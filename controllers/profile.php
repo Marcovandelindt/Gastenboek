@@ -5,23 +5,14 @@ class ProfileController extends Controller {
 	public function __construct() {
 		parent::__construct();
 
-		$this->load->Model('User');
+		$this->load->Model('Profile');
 
-		$user = new User();
+		$profile = new Profile();
 
-		$user->checkSession();
+		$profile->getProfile();
 
-		$this->load->Model('Messages');
-
-		$messages = new Messages();
-
-		$messages->deleteMessage(); 
-
-		$data['title'] = 'My Profile - Gastenboek';
-		$data['user'] = $user;
-		$data['error'] = $user->error;
-		$data['success'] = $user->success;
-		$data['messages'] = $messages;
+		$data['title'] = 'Profile';
+		$data['profile'] = $profile;
 
 		$this->load->View('profile', $data);
 	}
