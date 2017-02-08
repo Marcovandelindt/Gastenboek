@@ -2,7 +2,7 @@
 
 class Profile extends Model {
 
-	private $result;
+	public $result;
 
 	public function getProfile() {
 		
@@ -17,10 +17,14 @@ class Profile extends Model {
 		}
 
 		$this->result = $get->fetch(PDO::FETCH_ASSOC);
+
+		if (!isset($_SESSION['user'])) {
+			header('Location: ../home?Message=NotAllowed');
+		}
 	}
 
 	public function getUsername() {
-		echo $this->result['username'];
+		return $this->result['username'];
 	}
 
 	public function getUserDetails() {
@@ -44,6 +48,44 @@ class Profile extends Model {
 		if (!empty($this->result['first_name'])) {
 			echo '<li class="list-group-item"><strong>First name:</strong><span class="pull-right">' . $this->result['first_name'] . '</span></li>';
 		}
+
+		if (!empty($this->result['last_name'])) {
+			echo '<li class="list-group-item"><strong>Last name:</strong><span class="pull-right">' . $this->result['last_name'] . '</span></li>';
+		} else {
+			if ($this->result['last_name'] <= 25) {
+				echo '<li class="list-group-item"><strong>Last name:</strong><br>' . $this->result['last_name'] . '</li>';
+			}
+		}
+
+		if (!empty($this->result['nickname'])) {
+			echo '<li class="list-group-item"><strong>Nickname:</strong><span class="pull-right">' . $this->result['nickname'] . '</span></li>';
+		} else {
+			if ($this->result['nickname'] <= 25) {
+				echo '<li class="list-group-item"><strong>Nickname:</strong><br>' . $this->result['nickname'] . '</li>';
+			}
+		}
+
+		if (!empty($this->result['country'])) {
+			echo '<li class="list-group-item"><strong>Country:</strong><span class="pull-right">' . $this->result['country'] . '</span></li>';
+		} else {
+			if ($this->result['counrty'] <= 25) {
+				echo '<li class="list-group-item"><strong>Country:</strong><br>' . $this->result['country'] . '</li>';
+			}
+		}
+
+		if (!empty($this->result['bio'])) {
+			echo '<li class="list-group-item"><strong>Bio:</strong>&nbsp;' . $this->result['bio'] . '</li>';
+		}
+
+		if ($this->result['status'] == 'Online') {
+			echo '<li class="list-group-item"><strong>Status:</strong><span class="pull-right"><i class="fa fa-circle-thin online-icon"></i>&nbsp;' . $this->result['status'] . '</span></li>';
+		} else {
+			if ($this->result['status'] == "Offline") {
+				echo '<li class="list-group-item"><strong>Status:</strong><span class="pull-right"><i class="fa fa-circle-thin offline-icon"></i>&nbsp;' . $this->result['status'] . '</span></li>';
+				echo '<li class="list-group-item"><strong>Last login:</strong><span class="pull-right">' . date('H:i, d-m-Y', strtotime($this->result['last_online'])) . '</span></li>';
+			}
+		}
+
 	}
 
 	public function getUsersMessages() {
@@ -126,7 +168,17 @@ class Profile extends Model {
 		}
 	}
 
-	public function checkSessionAndUser() {
+	public function showEditPanel() {
 
+		if ($_SESSION['user']['username'] == $this->result['username']) {
+			echo '
+				<div class="edit-panel">
+					<ul class="list-group">
+						<li class="list-group-item active"><strong>Edit my Profile</strong></li>
+						<a href="' . $this->result['username'] . '&edit"><li class="list-group-item">Personal Information</li></a>
+					</ul>
+				</div>
+			';
+		}
 	}
 }
