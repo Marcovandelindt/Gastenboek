@@ -33,18 +33,6 @@ class Profile extends Model {
 			echo '<li class="list-group-item"><strong>Username:</strong><span class="pull-right">@' . $this->result['username'] . '</span></li>';
 		}
 
-		if (!empty($this->result['email'])) {
-			echo '<li class="list-group-item"><strong>E-mail:</strong><span class="pull-right">' . $this->result['email'] . '</span></li>';
-		} else {
-			if (strlen($this->result['email']) <= 25) {
-				echo '<li class="list-group-item"><strong>E-mail:</strong><br>' . $this->result['email'] . '</li>';
-			}
-		}
-
-		if (!empty($this->result['birth_date'])) {
-			echo '<li class="list-group-item"><strong>Date of Birth:</strong><span class="pull-right">' . $this->result['birth_date'] . '</span></li>';
-		}
-
 		if (!empty($this->result['first_name'])) {
 			echo '<li class="list-group-item"><strong>First name:</strong><span class="pull-right">' . $this->result['first_name'] . '</span></li>';
 		}
@@ -55,6 +43,10 @@ class Profile extends Model {
 			if ($this->result['last_name'] <= 25) {
 				echo '<li class="list-group-item"><strong>Last name:</strong><br>' . $this->result['last_name'] . '</li>';
 			}
+		}
+
+		if (!empty($this->result['birth_date'])) {
+			echo '<li class="list-group-item"><strong>Date of Birth:</strong><span class="pull-right">' . $this->result['birth_date'] . '</span></li>';
 		}
 
 		if (!empty($this->result['nickname'])) {
@@ -68,8 +60,16 @@ class Profile extends Model {
 		if (!empty($this->result['country'])) {
 			echo '<li class="list-group-item"><strong>Country:</strong><span class="pull-right">' . $this->result['country'] . '</span></li>';
 		} else {
-			if ($this->result['counrty'] <= 25) {
+			if ($this->result['country'] <= 25) {
 				echo '<li class="list-group-item"><strong>Country:</strong><br>' . $this->result['country'] . '</li>';
+			}
+		}
+
+		if (!empty($this->result['email'])) {
+			echo '<li class="list-group-item"><strong>E-mail:</strong><span class="pull-right">' . $this->result['email'] . '</span></li>';
+		} else {
+			if (strlen($this->result['email']) <= 25) {
+				echo '<li class="list-group-item"><strong>E-mail:</strong><br>' . $this->result['email'] . '</li>';
 			}
 		}
 
@@ -101,7 +101,7 @@ class Profile extends Model {
 						<div class="user-message">
 							<div class="media">
 								<div class="media-left">
-									<img src="../assets/images/' . $item['image'] . '">
+									<img src="../' . $item['image'] . '">
 								</div>
 								<div class="media-body">
 									<p class="message-username">' . $item['username'] . '</p>
@@ -125,7 +125,7 @@ class Profile extends Model {
 						<div class="user-message">
 							<div class="media">
 								<div class="media-left">
-									<img src="../assets/images/' . $item['image'] . '">
+									<img src="../' . $item['image'] . '">
 								</div>
 								<div class="media-body">
 									<p class="message-username">' . $item['username'] . '</p>
@@ -141,30 +141,15 @@ class Profile extends Model {
 		}
 	}
 
-	public function getUsersMessagesWithoutButton() {
-		$get = $this->connect->database->prepare('SELECT * FROM messages WHERE username = :username ORDER BY date DESC');
-		$get->execute([
-			'username' => $this->result['username']
-		]);
+	public function deleteMessage() {
+		
+		if (isset($_POST['delete'])) {
+			$delete = $this->connect->database->prepare('DELETE FROM messages WHERE id = :id');
+			$delete->execute([
+				'id' => $this->request->get('hidden')
+			]);
 
-		foreach ($get as $item) {
-			echo '
-				<form class="form" method="POST">
-					<div class="user-message">
-						<div class="media">
-							<div class="media-left">
-								<img src="../assets/images/' . $item['image'] . '">
-							</div>
-							<div class="media-body">
-								<p class="message-username">' . $item['username'] . '</p>
-								<p class="message-text">' . $item['message'] . '</p>
-								<p class="date">' . $item['date'] . '</p>
-							</div>
-						</div>
-					</div>
-				</form>
-				<hr>
-			';
+			return $this->success = 'You have successully deleted your message!';
 		}
 	}
 
@@ -176,9 +161,33 @@ class Profile extends Model {
 					<ul class="list-group">
 						<li class="list-group-item active"><strong>Edit my Profile</strong></li>
 						<a href="' . $this->result['username'] . '&edit"><li class="list-group-item">Personal Information</li></a>
+						<a href="' . $this->result['username'] . '&account"><li class="list-group-item">Account</li></a>
 					</ul>
 				</div>
 			';
+		}
+	}
+
+	public function editAccount() {
+		
+		if (isset($_POST['editAccount'])) {
+
+			if (is_uploaded_file($_FILES['image']['tmp_name'])) {
+				$folder = 'assets/images/';
+				$file = basename($_FILES['image']['name']);
+				$fullpath = $folder . $file;
+
+				if (move_uploaded_file($_FILES['image']['tmp_name'], $fullpath)) {
+					echo 'Thank You!';
+				}
+			}
+
+			$update = $this->connect->database->prepare('UPDATE users SET username = "' . $this->request->get('username') . '", image = "' . $fullpath . '" WHERE id = ' . $_SESSION['user']['id'] . '');
+			$update->execute();
+
+			session_destroy();
+
+			header('Location: ../logout');
 		}
 	}
 }

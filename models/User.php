@@ -158,7 +158,7 @@ class User extends Model {
 					$update = $this->connect->database->prepare('UPDATE users SET ip_address = :ip_address, user_agent = :user_agent');
 					$update->execute([
 						'ip_address' => $_SERVER['REMOTE_ADDR'],
-						'user_agent' => $_SERVER['HTTP_USER_AGENT']
+						'user_agent' => $_SERVER['HTTP_USER_AGENT'],
 					]);
 
 					// Unset password and salt before creating a Session
@@ -268,36 +268,6 @@ class User extends Model {
 
 	// Hidden input meegeven
 
-	public function getUsersMessages() {
-		$get = $this->connect->database->prepare('SELECT * FROM messages WHERE username = :username ORDER BY date DESC');
-		$get->execute([
-			'username' => $_SESSION['user']['username']
-		]);
-
-		foreach ($get as $item) {
-			echo '
-				<form class="form" method="POST">
-					<div class="user-message">
-						<div class="media">
-							<div class="media-left">
-								<img src="assets/images/' . $item['image'] . '">
-							</div>
-							<div class="media-body">
-								<p class="message-username">' . $item['username'] . '</p>
-								<p class="message-text">' . $item['message'] . '</p>
-								<p class="date">' . $item['date'] . '</p>
-								<div class="form-group">
-									<input type="hidden" name="hidden" value="' . $item['id'] . '">
-									<button type="submit" class="btn btn-danger" id="' . $item['id'] . '" name="delete">Delete</button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</form>
-				<hr>
-			';
-		}
-	}
 
 	public function logoutUser()
 	{

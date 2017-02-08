@@ -31,7 +31,7 @@
 						<ul class="nav navbar-nav navbar-right">
 							<li class="active"><a href="home">Homepage</a></li>
 							<li><a href="">My Friends</a></li>
-							<li><a href="profile">My Profile</a></li>
+							<li><a href="profile/<?php echo $_SESSION['user']['username']; ?>">My Profile</a></li>
 							<li><a href="logout">Logout</a></li>
 						</ul>
 					</div>
@@ -50,6 +50,14 @@
 					?>
 				</div>
 			</nav>
+
+			<?php
+				if (isset($_GET['Message'])) {
+					echo '
+						<div class="alert alert-danger">You are not allowed to view other profiles when you\'re not logged in. Please log first!	
+					';
+				}
+			?>
 
 			<!-- Continuing with the rest of the page -->
 			<div class="section">
@@ -155,7 +163,7 @@
 										?>
 										<div class="media">
 											<div class="media-left">
-												<img src="assets/images/placeholdermale.jpg">
+												<img src="<?php echo $_SESSION['user']['image']; ?>">
 											</div>
 											<div class="media-body">
 												<div class="row">

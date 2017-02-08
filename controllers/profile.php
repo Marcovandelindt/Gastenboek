@@ -10,9 +10,21 @@ class ProfileController extends Controller {
 		$profile = new Profile();
 
 		$profile->getProfile();
+		$profile->editAccount();
 
-		$data['title'] = 'Profile';
-		$data['profile'] = $profile;
+		$this->load->Model('Messages');
+
+		$messages = new Messages();
+
+		$messages->deleteMessage();
+
+		$data = [
+			'title' => 'Profile',
+			'profile' => $profile,
+			'messages' => $messages,
+			'username' => $profile->result['username']
+		];
+
 
 		$this->load->View('profile', $data);
 	}

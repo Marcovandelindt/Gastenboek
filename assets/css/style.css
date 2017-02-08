@@ -208,6 +208,10 @@ body {
 	border: none !important;
 }
 
+.profile .thumbnail img {
+	height: 250px !important;
+}
+
 .profile .list-group-item {
 	margin-left: -13px !important;
 	margin-right: -13px !important;
@@ -230,4 +234,18 @@ body {
 
 .remover:hover {
 	cursor: pointer;
+}
+
+.user-messages-panel label {
+	color: #000 !important;
+}
+
+.edit-profile label,
+.edit-account label {
+	color: #000 !important;
+}
+
+.edit-panel .list-group-item {
+	border-top: none !important;
+	border-radius: 0px !important;
 }

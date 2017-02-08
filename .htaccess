@@ -7,4 +7,4 @@ RewriteRule ^(.*)/$ /$1 [L,R=301]
 # Handle Front Controller...
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteCond %{REQUEST_FILENAME} !-f
-RewriteRule ^([^/]+)/?([^/]*)$ index.php?page=$1&value=$2 [L]
+RewriteRule ^([^/]+)/?([^/]*)$ index.php?page=$1&value=$2&type=$3 [L,NC,QSA]

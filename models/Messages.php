@@ -22,7 +22,7 @@ class Messages extends Model
 				$insert->execute([
 					':username' => $_SESSION['user']['username'],
 					':message' => $this->request->get('message'),
-					':image' => 'placeholdermale.jpg'
+					':image' => $_SESSION['user']['image']
 				]);
 			}
 		}
@@ -38,7 +38,7 @@ class Messages extends Model
 			echo '
 				<div class="media message-wrapper message' . $item['id'] . '">
 					<div class="media-left">
-						<img class="media-object" src="assets/images/' . $item['image'] . '">
+						<img class="media-object" src="' . $item['image'] . '">
 					</div>
 					<div class="media-body">
 						<a class="name" href="profile/' . $item['username'] . '">' . $item['username'] . '</a>
@@ -60,7 +60,7 @@ class Messages extends Model
 			echo '
 				<div class="media">
 					<div class="media-left">
-						<img class="media-object" src="assets/images/' . $item['image'] . '">
+						<img class="media-object" src="' . $item['image'] . '">
 					</div>
 					<div class="media-body">
 						<p class="name">' . $item['username'] . '</p>
