@@ -53,6 +53,11 @@ body {
 	border: none !important;
 }
 
+.media-object {
+	height: 64px;
+	width: 64px;
+}
+
 /* | Top Navigation | */
 .top-nav {
 	background-color: #33363c !important;
@@ -87,11 +92,6 @@ body {
 
 .recent-members .list-group-item {
 	border: none !important;
-}
-
-.media-object {
-	height: 64px;
-	width: 64px;
 }
 
 .media .name {
