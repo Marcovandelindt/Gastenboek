@@ -82,14 +82,24 @@
 						</div>
 						<div class="panel-body">
 							<form class="form" method="POST">
-								<label for="welcome-message" class="label-control">Hello, <?php echo $username; ?>. Would you like to share something?</label>
-								<br><br>
-								<div class="row">
-									<div class="col-sm-9">
-										<textarea class="form-control" name="message" placeholder="What would you like to say?"></textarea>
+								<label for="welcome-text">Welcome back, <?php echo $_SESSION['user']['username']; ?>. What would you like to share?</label>
+								<div class="media">
+									<div class="media-left">
+										<img src="../<?php echo $_SESSION['user']['image']; ?>" class="media-object">
 									</div>
-									<div class="col-sm-3">
-										<button type="button" class="btn btn-success" name="sendMessage">Post It!</button>
+									<div class="media-body">
+										<div class="row">
+											<div class="col-sm-9">
+												<div class="form-group">
+													<textarea class="form-control" name="message" placeholder="Share something with the world!"></textarea>
+												</div>
+											</div>
+											<div class="col-xs-3">
+												<div class="form-group">
+													<button type="submit" class="btn btn-success post-message" name="sendMessage">Post it!</button>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</form>
@@ -101,13 +111,30 @@
 				<!-- If the URL contains &edit -->
 				<?php } else if (isset($_GET['edit']) && !isset($_GET['account'])) { ?>
 				<div class="col-md-6">
-					<div class="alert alert-info">From this page, you can edit your personal information!</div>
+					<div class="alert alert-info">From this page, you can edit your personal information! Check everything twice before you submit, because after you've submitted your information,. you have to logout and log back in to see the changes!</div>
 					<div class="panel panel-default edit-profile default-panel">
 						<div class="panel-heading">
 							<p>Change my personal information!</p>
 						</div>
 						<div class="panel-body">
 							<form class="form" method="POST">
+								<?php
+									if (isset($error)) {
+										echo '
+											<div class="alert alert-danger">
+												<i class="fa fa-exclamation"></i>&nbsp;' . $error . '<i class="fa fa-remove pull-right remover"></i>
+											</div>
+										';
+									}
+
+									if (isset($success)) {
+										echo '
+											<div class="alert alert-success">
+												<i class="fa fa-thumbs-up"></i>&nbsp;' . $success . '<i class="fa fa-remove pull-right remover"></i>
+											</div>
+										';
+									}
+								?>
 								<div class="form-group row">
 									<div class="col-sm-12">
 										<label for="firstname" class="col-2 col-form-label">First name:</label>
@@ -166,7 +193,7 @@
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-12 add-padding">
-										<button type="submit" class="btn btn-info" name="editProfile">Edit</button>
+										<button type="submit" class="btn btn-info" name="editInformation">Edit</button>
 										<button type="reset" class="btn btn-warning" name="reset">Reset</button>
 									</div>
 								</div>
@@ -231,5 +258,13 @@
 			</div>
 		</div>
 	</div>
+
+	<?php require 'requirements/footer.html'; ?>
+
+	<script type="text/javascript">
+		$('.remover').on('click', function() {
+			$(this).parent().fadeOut(500);
+		});
+	</script>
 </body>
 </html>
