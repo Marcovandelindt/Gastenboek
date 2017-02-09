@@ -242,23 +242,60 @@
 
 				<div class="col-md-3">
 					<?php $profile->showEditPanel(); ?>
+					<ul class="list-group">
+						<li class="list-group-item active"><strong>Frequently Asked Questions</strong></li>
+						<li class="list-group-item faq-modal" data-toggle="modal" data-target="#change-info">How do I change my personal information?</li>
+						<li class="list-group-item faq-modal" data-toggle="modal" data-target="#change-username">How do I change my username?</li>
+						<li class="list-group-item faq-modal" data-toggle="modal" data-target="#change-profile-picture">How do I change my profile picture?</li>
+						<li class="list-group-item faq-modal" data-toggle="modal" data-target="#general-rules">General rules off the Guestbook.</li>
+					</ul>	
 				</div>
 			<!-- If the Session of the current user isn't the same as the users profile, show the following -->
 			<?php } else { ?>
 				<div class="col-md-3">
-
+					<div class="profile">
+						<div class="thumbnail">
+							<img src="../<?php echo $image; ?>">
+							<div class="caption">
+								<ul class="list-group">
+									<li class="list-group-item active">Personal Information</li>
+									<?php echo $profile->getUserDetails(); ?>
+								</ul>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="col-md-6">
-
+					<div class="panel panel-default user-messages default-panel">
+						<div class="panel-heading">
+							<p>Messages posted by: <strong>@<?php echo $username; ?></strong></p>
+						</div>
+						<div class="media-body">
+							<?php echo $profile->getUsersMessages(); ?>
+						</div>
+					</div>
 				</div>
 				<div class="col-md-3">
-
+					<?php if ($username == 'Support') { ?>
+						<div class="panel panel-default faq-panel default-panel">
+							<div class="panel-heading">
+								<p>Frequently Asked Questions</p>
+							</div>
+							<div class="panel-body">
+								<ul class="list-group">
+									<li class="list-group-item">Testlinkje</li>
+								</ul>
+							</div>
+						</div> 
+					<?php } else { ?>
+					<?php } ?>
 				</div>
 			<?php }  ?>
 			</div>
 		</div>
 	</div>
 
+	<?php require 'requirements/modals.html'; ?>
 	<?php require 'requirements/footer.html'; ?>
 
 	<script type="text/javascript">

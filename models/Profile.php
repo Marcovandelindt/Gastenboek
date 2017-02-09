@@ -123,28 +123,23 @@ class Profile extends Model {
 		} else {
 			foreach ($get as $item) {
 				echo '
-					<form class="form" method="POST">
+					<div class="col-sm-12">
 						<div class="user-message">
-							<div class="media">
-								<div class="media-left">
-									<img src="../' . $item['image'] . '">
-								</div>
-								<div class="media-body">
-									<p class="message-username">' . $item['username'] . '</p>
-									<p class="message-text">' . $item['message'] . '</p>
-									<p class="date">' . $item['date'] . '</p>
-								</div>
+						<div class="media">
+							<div class="media-left">
+								<img src="../' . $item['image'] . '">
+							</div>
+							<div class="media-body">
+								<p class="message-username">' . $item['username'] . '</p>
+								<p class="message-text">' . $item['message'] . '</p>
+								<p class="date">' . $item['date'] . '</p>
 							</div>
 						</div>
-					</form>
-					<hr>
+					</div>
+					</div>
 				';
 			}
 		}
-	}
-
-	public function postMessage() {
-		
 	}
 
 	public function deleteMessage() {
@@ -239,6 +234,10 @@ class Profile extends Model {
 				$folder = 'assets/images/';
 				$file = basename($_FILES['image']['name']);
 				$fullpath = $folder . $file;
+
+				if (getimagesize($file > 2097152)) {
+					return $this->error = 'Please, choose an image which is not greater than 2MB!';
+				}
 
 				if (move_uploaded_file($_FILES['image']['tmp_name'], $fullpath)) {
 					echo 'Thank You!';

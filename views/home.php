@@ -225,6 +225,9 @@
 									<div class="form-group">
 										<button type="submit" class="btn btn-primary" name="login">Login</button>
 									</div>
+									<div class="form-group">
+										<a href="register">I don't have an account yet!</a>
+									</div>
 								</form>
 							</div>
 						</div>

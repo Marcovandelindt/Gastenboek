@@ -222,6 +222,10 @@ body {
 	border-top: 1px solid #ccc;
 }
 
+.user-message {
+	padding-top: 15px;	
+}
+
 .user-message .media img {
 	height: 64px;
 	width: 64px;
@@ -248,4 +252,17 @@ body {
 .edit-panel .list-group-item {
 	border-top: none !important;
 	border-radius: 0px !important;
+}
+
+.faq-modal {
+	transition: .5s ease;
+	-moz-transition: .5s ease;
+	-webkit-transition: .5s ease;
+	-ms-transition: .5s ease;
+	-o-transition: .5s ease;
+}
+
+.faq-modal:hover {
+	cursor: pointer;
+	color: #1991DB;
 }

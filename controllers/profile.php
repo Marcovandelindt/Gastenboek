@@ -16,7 +16,7 @@ class ProfileController extends Controller {
 		$this->load->Model('Messages');
 
 		$messages = new Messages();
-		
+
 		$messages->validateMessage(); 
 		$messages->deleteMessage();
 
@@ -25,6 +25,7 @@ class ProfileController extends Controller {
 			'profile' 	=> $profile,
 			'messages' 	=> $messages,
 			'username' 	=> $profile->result['username'],
+			'image'		=> $profile->result['image'],
 			'error' 	=> $profile->error,
 			'success' 	=> $profile->success
 		];
