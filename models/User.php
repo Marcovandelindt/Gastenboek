@@ -155,7 +155,7 @@ class User extends Model {
 				if ($loggedin) {
 					
 					// Update the login count
-					$update = $this->connect->database->prepare('UPDATE users SET ip_address = :ip_address, user_agent = :user_agent');
+					$update = $this->connect->database->prepare('UPDATE users SET ip_address = :ip_address, user_agent = :user_agent, logins = logins+1');
 					$update->execute([
 						'ip_address' => $_SERVER['REMOTE_ADDR'],
 						'user_agent' => $_SERVER['HTTP_USER_AGENT'],
