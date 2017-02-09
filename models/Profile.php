@@ -3,6 +3,8 @@
 class Profile extends Model {
 
 	public $result;
+	public $error 	= NULL;
+	public $success = NULL;
 
 	public function getProfile() {
 		
@@ -141,6 +143,10 @@ class Profile extends Model {
 		}
 	}
 
+	public function postMessage() {
+		
+	}
+
 	public function deleteMessage() {
 		
 		if (isset($_POST['delete'])) {
@@ -165,6 +171,63 @@ class Profile extends Model {
 					</ul>
 				</div>
 			';
+		}
+	}
+
+	public function editInformation() {
+
+		$scripts = "#<script(.*?)>(.*?)</script>#is";
+
+		if (isset($_POST['editInformation'])) {
+
+			// Validate all the fields on JavaScript
+			if (preg_match($scripts, $this->request->get('firstname'))) {
+				return $this->error = 'Your firstname cannot contain any JavaScript!';
+			}
+
+			if (preg_match($scripts, $this->request->get('lastname'))) {
+				return $this->error = 'Your lastname cannot contain any JavaScript!';
+			}
+
+			if (preg_match($scripts, $this->request->get('birth_date'))) {
+				return $this->error = 'Your birth date cannot contain any JavaScript!';
+			}
+
+			if (preg_match($scripts, $this->request->get('nickname'))) {
+				return $this->error = 'Your nickname cannot contain any JavaScript!';
+			}
+
+			if (preg_match($scripts, $this->request->get('country'))) {
+				return $this->error = 'You country cannot cointain any JavaScript!';
+			}
+
+			if (preg_match($scripts, $this->request->get('email'))) {
+				return $this->error = 'You e-mail address cannot contain any JavaScript!';
+			}
+
+			if (preg_match($scripts, $this->request->get('bio'))) {
+				return $this->errror = 'Your bio cannot contain any JavaScript!';
+			} else {
+
+				// Update the users information
+				$update = $this->connect->database->prepare('UPDATE users SET first_name = :firstname, last_name = :lastname, birth_date = :birthdate, nickname = :nickname, country = :country, email = :email, bio = :bio WHERE id = :id');
+				$update->execute([
+					'firstname' => $this->request->get('firstname'),
+					'lastname' 	=> $this->request->get('lastname'),
+					'birthdate' => $this->request->get('birthdate'),
+					'nickname' 	=> $this->request->get('nickname'),
+					'country' 	=> $this->request->get('country'),
+					'email' 	=> $this->request->get('email'),
+					'bio' 		=> $this->request->get('bio'),
+					'id' 		=> $_SESSION['user']['id']
+				]);
+
+				if ($update) {
+					header('Location: ../logout?logout=True');
+				} else {
+					return $this->error = 'Something went wrong. Please try again later.';
+				}
+			}
 		}
 	}
 
