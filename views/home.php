@@ -54,7 +54,7 @@
 			<?php
 				if (isset($_GET['Message'])) {
 					echo '
-						<div class="alert alert-danger">You are not allowed to view other profiles when you\'re not logged in. Please log first!	
+						<div class="alert alert-danger">You are not allowed to view other profiles when you\'re not logged in. Please log in first!</div>	
 					';
 				}
 			?>
@@ -163,7 +163,7 @@
 										?>
 										<div class="media">
 											<div class="media-left">
-												<img src="<?php echo $_SESSION['user']['image']; ?>">
+												<img src="<?php echo $_SESSION['user']['image']; ?>" class="media-object">
 											</div>
 											<div class="media-body">
 												<div class="row">
